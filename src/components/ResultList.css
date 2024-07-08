@@ -1,0 +1,27 @@
+.result-list {
+  padding: 10px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.card {
+  background-color: #e3e5bb;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  width: 200px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card p {
+  margin: 5px 0;
+}

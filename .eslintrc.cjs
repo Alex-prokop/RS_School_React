@@ -27,5 +27,14 @@ module.exports = {
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
     'react/jsx-no-target-blank': 'error', // Правило для target="_blank" без rel="noreferrer"
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        types: {
+          '{}': false,
+        },
+        extendDefaults: true,
+      },
+    ],
   },
 };
