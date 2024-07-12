@@ -1,87 +1,93 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AstronomicalObject, ApiResponse } from '../types';
 import './ResultList.css';
+import Pagination from './Pagination';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ResultsProps {
   searchTerm: string;
 }
 
-interface ResultsState {
-  data: AstronomicalObject[];
-  isLoading: boolean;
-  error: string | null;
-}
+const ResultList: React.FC<ResultsProps> = ({ searchTerm }) => {
+  const [data, setData] = useState<AstronomicalObject[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-class ResultList extends Component<ResultsProps, ResultsState> {
-  constructor(props: ResultsProps) {
-    super(props);
-    this.state = {
-      data: [],
-      isLoading: false,
-      error: null,
-    };
-  }
+  const queryParams = new URLSearchParams(location.search);
+  const page = parseInt(queryParams.get('page') || '1', 10);
 
-  componentDidMount() {
-    console.log('ResultList mounted');
-    this.fetchData(this.props.searchTerm);
-  }
+  useEffect(() => {
+    const fetchData = async (term: string) => {
+      setIsLoading(true);
+      setError(null);
+      let allData: AstronomicalObject[] = [];
+      try {
+        const fetchPage = async (pageNumber: number) => {
+          const query = term ? `name=${encodeURIComponent(term)}` : '';
+          const url = `https://stapi.co/api/v2/rest/astronomicalObject/search?${query}&pageNumber=${pageNumber}&pageSize=100`;
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const result: ApiResponse = await response.json();
+          return result;
+        };
 
-  componentDidUpdate(prevProps: ResultsProps) {
-    if (prevProps.searchTerm !== this.props.searchTerm) {
-      console.log('ResultList updated with new search term');
-      this.fetchData(this.props.searchTerm);
-    }
-  }
+        let result = await fetchPage(0);
+        allData = result.astronomicalObjects;
 
-  fetchData = async (searchTerm: string) => {
-    console.log('Fetching data with search term:', searchTerm);
-    this.setState({ isLoading: true, error: null });
-    try {
-      const query = searchTerm ? `name=${encodeURIComponent(searchTerm)}` : '';
-      const url = `https://stapi.co/api/v2/rest/astronomicalObject/search?${query}&pageNumber=0&pageSize=10`;
-      console.log('Fetching URL:', url);
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const totalElements = result.page.totalElements;
+        const totalPages = Math.ceil(totalElements / 100);
+
+        for (let i = 1; i < totalPages; i++) {
+          result = await fetchPage(i);
+          allData = allData.concat(result.astronomicalObjects);
+        }
+
+        setData(allData);
+        setTotalPages(totalPages);
+        console.log(allData); // Выводим все данные в консоль
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
       }
-      const result: ApiResponse = await response.json();
-      console.log('API Response:', result);
+    };
 
-      // Фильтрация на стороне клиента
-      const filteredData = result.astronomicalObjects.filter((obj) => {
-        const term = searchTerm.toLowerCase();
-        const nameMatches = obj.name.toLowerCase().includes(term);
-        const typeMatches = obj.astronomicalObjectType
-          .toLowerCase()
-          .includes(term);
+    fetchData(searchTerm);
+  }, [searchTerm]);
 
-        return nameMatches || typeMatches;
-      });
-
-      this.setState({ data: filteredData, isLoading: false });
-    } catch (error) {
-      this.setState({ error: error.message, isLoading: false });
-    }
+  const handleSelectItem = (id: string) => {
+    navigate(`/?page=${page}&details=${id}&searchTerm=${searchTerm}`);
   };
 
-  render() {
-    const { data, isLoading, error } = this.state;
-    console.log('Rendering data:', data);
-    if (isLoading) {
-      return <div>Loading...</div>;
-    }
-    if (error) {
-      return <div>Error: {error}</div>;
-    }
-    return (
-      <div className="result-list">
-        {data.length === 0 ? (
-          <div>No results found</div>
-        ) : (
-          <div className="card-container">
-            {data.map((item: AstronomicalObject) => (
-              <div key={item.uid} className="card">
+  const handlePageChange = (newPage: number) => {
+    navigate(`/?page=${newPage}&searchTerm=${searchTerm}`);
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  return (
+    <div className="result-list" style={{ width: '50%' }}>
+      {data.length === 0 ? (
+        <div>No results found</div>
+      ) : (
+        <div className="card-container">
+          {data
+            .slice((page - 1) * 10, page * 10)
+            .map((item: AstronomicalObject) => (
+              <div
+                key={item.uid}
+                className="card"
+                onClick={() => handleSelectItem(item.uid)}
+              >
                 <h3>{item.name}</h3>
                 <p>{item.astronomicalObjectType}</p>
                 {item.location && (
@@ -91,11 +97,15 @@ class ResultList extends Component<ResultsProps, ResultsState> {
                 )}
               </div>
             ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-}
+        </div>
+      )}
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+    </div>
+  );
+};
 
 export default ResultList;

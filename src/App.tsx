@@ -1,52 +1,62 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import SearchBar from './components/SearchBar';
 import ErrorBoundary from './components/ErrorBoundary';
 import ResultList from './components/ResultList';
 import ThrowErrorButton from './components/ThrowErrorButton';
+import useSearchTerm from './hooks/useSearchTerm';
+import Details from './components/Details';
+import NotFound from './components/NotFound';
 
-interface AppState {
-  searchTerm: string;
-}
+const App = () => {
+  const [searchTerm, setSearchTerm] = useSearchTerm('searchTerm');
+  const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
-class App extends Component<{}, AppState> {
-  constructor(props: {}) {
-    super(props);
-    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
-    this.state = {
-      searchTerm: savedSearchTerm,
-    };
-  }
-
-  handleSearch = (searchTerm: string) => {
-    this.setState({ searchTerm });
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
   };
 
-  throwError = () => {
+  const throwError = () => {
     throw new Error('Test error');
   };
 
-  render() {
-    console.log('App render');
-    return (
-      <ErrorBoundary>
+  return (
+    <ErrorBoundary>
+      <Router>
         <div className="App">
           <main>
             <div
               className="search-bar"
               style={{ height: '5%', borderBottom: '1px solid #ccc' }}
             >
-              <SearchBar onSearch={this.handleSearch} />
-              <ThrowErrorButton throwError={this.throwError} />
+              <SearchBar onSearch={handleSearch} />
+              <ThrowErrorButton throwError={throwError} />
             </div>
-            <div style={{ height: '95%' }}>
-              <ResultList searchTerm={this.state.searchTerm} />
+            <div style={{ height: '95%', display: 'flex' }}>
+              <Routes>
+                <Route
+                  path="/"
+                  element={<ResultList searchTerm={searchTerm} />}
+                />
+                <Route path="/details/:id" element={<Details />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              {selectedId && (
+                <div
+                  className="details-panel"
+                  style={{ width: '50%', borderLeft: '1px solid #ccc' }}
+                >
+                  <button onClick={() => setSelectedId(null)}>Close</button>
+                  <Details id={selectedId} />
+                </div>
+              )}
             </div>
           </main>
         </div>
-      </ErrorBoundary>
-    );
-  }
-}
+      </Router>
+    </ErrorBoundary>
+  );
+};
 
 export default App;
