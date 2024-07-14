@@ -4,6 +4,10 @@ const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts'],
+  setupFilesAfterEnv: [
+    '<rootDir>/src/setupTests.ts',
+    'jest-fetch-mock/setupJest.js',
+  ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },

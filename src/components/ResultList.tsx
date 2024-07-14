@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useMemo,
-} from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   AstronomicalObjectV2Base,
   AstronomicalObjectV2BaseResponse,
@@ -20,20 +14,17 @@ interface ResultsProps {
 const ResultList: React.FC<ResultsProps> = ({ searchTerm }) => {
   const [data, setData] = useState<AstronomicalObjectV2Base[]>([]);
   const [filteredData, setFilteredData] = useState<AstronomicalObjectV2Base[]>(
-    [],
+    []
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
   const location = useLocation();
   const navigate = useNavigate();
 
   const cacheRef = useRef<Map<string, AstronomicalObjectV2Base[]>>(new Map());
-
-  const page = useMemo(() => {
-    const queryParams = new URLSearchParams(location.search);
-    return parseInt(queryParams.get('page') || '1', 10);
-  }, [location.search]);
+  const cardContainerRef = useRef<HTMLDivElement>(null);
 
   const fetchData = useCallback(async (term: string) => {
     setIsLoading(true);
@@ -72,9 +63,7 @@ const ResultList: React.FC<ResultsProps> = ({ searchTerm }) => {
 
       cacheRef.current.set(term, allData);
       setData(allData);
-      setTotalPages(Math.ceil(totalElements / 10)); // Ensure totalElements corresponds to the API response structure
-
-      console.log(allData); // Log all data to console
+      setTotalPages(Math.ceil(totalElements / 10));
     } catch (error) {
       setError((error as Error).message);
     } finally {
@@ -88,10 +77,22 @@ const ResultList: React.FC<ResultsProps> = ({ searchTerm }) => {
 
   useEffect(() => {
     const filtered = data.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filtered);
   }, [data, searchTerm]);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const pageParam = parseInt(queryParams.get('page') || '1', 10);
+    setPage(pageParam);
+  }, [location.search]);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set('page', page.toString());
+    navigate(`/?${queryParams.toString()}`);
+  }, [page, navigate, location.search]);
 
   const handleSelectItem = useCallback(
     (id: string) => {
@@ -99,17 +100,24 @@ const ResultList: React.FC<ResultsProps> = ({ searchTerm }) => {
       queryParams.set('details', id);
       navigate(`/?${queryParams.toString()}`);
     },
-    [navigate, location.search],
+    [navigate, location.search]
   );
 
-  const handlePageChange = useCallback(
-    (newPage: number) => {
-      const queryParams = new URLSearchParams(location.search);
-      queryParams.set('page', newPage.toString());
-      navigate(`/?${queryParams.toString()}`);
-    },
-    [navigate, location.search],
-  );
+  const handlePageChange = useCallback((newPage: number) => {
+    setPage(newPage);
+  }, []);
+
+  const handleClose = () => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.delete('details');
+    navigate(`/?${queryParams.toString()}`);
+  };
+
+  const handleClickContainer = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === cardContainerRef.current) {
+      handleClose();
+    }
+  };
 
   return (
     <div className="result-list" style={{ width: '100%' }}>
@@ -120,7 +128,11 @@ const ResultList: React.FC<ResultsProps> = ({ searchTerm }) => {
           {filteredData.length === 0 ? (
             <div>No results found</div>
           ) : (
-            <div className="card-container">
+            <div
+              ref={cardContainerRef}
+              className="card-container"
+              onClick={handleClickContainer}
+            >
               {filteredData
                 .slice((page - 1) * 10, page * 10)
                 .map((item: AstronomicalObjectV2Base) => (

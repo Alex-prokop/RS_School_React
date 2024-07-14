@@ -7,7 +7,7 @@ const Details: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get('details');
   const [data, setData] = useState<AstronomicalObjectV2FullResponse | null>(
-    null,
+    null
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,8 +20,9 @@ const Details: React.FC = () => {
         setIsLoading(true);
         setError(null);
         try {
+          await new Promise((resolve) => setTimeout(resolve, 500)); // добавляем задержку для имитации времени загрузки
           const response = await fetch(
-            `https://stapi.co/api/v2/rest/astronomicalObject?uid=${id}`,
+            `https://stapi.co/api/v2/rest/astronomicalObject?uid=${id}`
           );
           if (!response.ok) {
             throw new Error('Network response was not ok');
