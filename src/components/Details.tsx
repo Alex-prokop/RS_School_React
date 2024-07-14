@@ -1,40 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { AstronomicalObject } from '../types';
+import { AstronomicalObjectV2FullResponse } from '../types';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-interface DetailsProps {
-  id?: string;
-}
-
-const Details: React.FC<DetailsProps> = ({ id }) => {
-  const params = useParams<{ id: string }>();
-  const itemId = id || params.id;
-  const [data, setData] = useState<AstronomicalObject | null>(null);
+const Details: React.FC = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const id = queryParams.get('details');
+  const [data, setData] = useState<AstronomicalObjectV2FullResponse | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(
-          `https://stapi.co/api/v2/rest/astronomicalObject?uid=${itemId}`,
-        );
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    if (id) {
+      const fetchData = async () => {
+        console.log(`Fetching data for id: ${id}`);
+        setIsLoading(true);
+        setError(null);
+        try {
+          const response = await fetch(
+            `https://stapi.co/api/v2/rest/astronomicalObject?uid=${id}`,
+          );
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const result: AstronomicalObjectV2FullResponse =
+            await response.json();
+          console.log('API response:', result);
+          setData(result);
+        } catch (error) {
+          setError((error as Error).message);
+        } finally {
+          setIsLoading(false);
         }
-        const result = await response.json();
-        setData(result.astronomicalObject); // Убедитесь, что result содержит нужный объект
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      };
 
-    fetchData();
-  }, [itemId]);
+      fetchData();
+    }
+  }, [id]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -42,19 +47,40 @@ const Details: React.FC<DetailsProps> = ({ id }) => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-  if (!data) {
+  if (!data || !data.astronomicalObject) {
     return <div>No details available</div>;
   }
 
+  const { astronomicalObject } = data;
+
+  const handleClose = () => {
+    queryParams.delete('details');
+    navigate(`/?${queryParams.toString()}`);
+  };
+
   return (
     <div>
-      <h2>{data.name}</h2>
-      <p>Type: {data.astronomicalObjectType}</p>
-      {data.location && (
+      <h2>{astronomicalObject.name}</h2>
+      <p>Type: {astronomicalObject.astronomicalObjectType}</p>
+      {astronomicalObject.location && (
         <p>
-          Location: {data.location.name} (UID: {data.location.uid})
+          Location: {astronomicalObject.location.name} (UID:{' '}
+          {astronomicalObject.location.uid})
         </p>
       )}
+      {astronomicalObject.astronomicalObjects && (
+        <div>
+          <h3>Contained Objects:</h3>
+          <ul>
+            {astronomicalObject.astronomicalObjects.map((obj) => (
+              <li key={obj.uid}>
+                {obj.name} ({obj.astronomicalObjectType})
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <button onClick={handleClose}>Close</button>
     </div>
   );
 };

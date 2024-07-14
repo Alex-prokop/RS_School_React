@@ -6,9 +6,7 @@ const useSearchTerm = (key: string, initialValue: string = '') => {
   });
 
   useEffect(() => {
-    return () => {
-      localStorage.setItem(key, searchTerm);
-    };
+    localStorage.setItem(key, searchTerm);
   }, [key, searchTerm]);
 
   return [searchTerm, setSearchTerm] as const;

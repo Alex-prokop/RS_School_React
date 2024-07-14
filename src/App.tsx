@@ -3,15 +3,14 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import SearchBar from './components/SearchBar';
 import ErrorBoundary from './components/ErrorBoundary';
-import ResultList from './components/ResultList';
 import ThrowErrorButton from './components/ThrowErrorButton';
 import useSearchTerm from './hooks/useSearchTerm';
 import Details from './components/Details';
 import NotFound from './components/NotFound';
+import MainPage from './components/MainPage';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useSearchTerm('searchTerm');
-  const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
@@ -37,20 +36,11 @@ const App = () => {
               <Routes>
                 <Route
                   path="/"
-                  element={<ResultList searchTerm={searchTerm} />}
+                  element={<MainPage searchTerm={searchTerm} />}
                 />
                 <Route path="/details/:id" element={<Details />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
-              {selectedId && (
-                <div
-                  className="details-panel"
-                  style={{ width: '50%', borderLeft: '1px solid #ccc' }}
-                >
-                  <button onClick={() => setSelectedId(null)}>Close</button>
-                  <Details id={selectedId} />
-                </div>
-              )}
             </div>
           </main>
         </div>

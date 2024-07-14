@@ -1,5 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { AstronomicalObject, ApiResponse } from '../types';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from 'react';
+import {
+  AstronomicalObjectV2Base,
+  AstronomicalObjectV2BaseResponse,
+} from '../types';
 import './ResultList.css';
 import Pagination from './Pagination';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -9,101 +18,130 @@ interface ResultsProps {
 }
 
 const ResultList: React.FC<ResultsProps> = ({ searchTerm }) => {
-  const [data, setData] = useState<AstronomicalObject[]>([]);
+  const [data, setData] = useState<AstronomicalObjectV2Base[]>([]);
+  const [filteredData, setFilteredData] = useState<AstronomicalObjectV2Base[]>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(1);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const queryParams = new URLSearchParams(location.search);
-  const page = parseInt(queryParams.get('page') || '1', 10);
+  const cacheRef = useRef<Map<string, AstronomicalObjectV2Base[]>>(new Map());
+
+  const page = useMemo(() => {
+    const queryParams = new URLSearchParams(location.search);
+    return parseInt(queryParams.get('page') || '1', 10);
+  }, [location.search]);
+
+  const fetchData = useCallback(async (term: string) => {
+    setIsLoading(true);
+    setError(null);
+    if (cacheRef.current.has(term)) {
+      setData(cacheRef.current.get(term) || []);
+      setIsLoading(false);
+      return;
+    }
+
+    let allData: AstronomicalObjectV2Base[] = [];
+    try {
+      const query = term ? `name=${encodeURIComponent(term)}` : '';
+      const url = `https://stapi.co/api/v2/rest/astronomicalObject/search?${query}&pageNumber=0&pageSize=100`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result: AstronomicalObjectV2BaseResponse = await response.json();
+
+      allData = result.astronomicalObjects;
+
+      const totalElements = result.page.totalElements;
+      const totalPages = Math.ceil(totalElements / 100);
+
+      for (let i = 1; i < totalPages; i++) {
+        const pageUrl = `https://stapi.co/api/v2/rest/astronomicalObject/search?${query}&pageNumber=${i}&pageSize=100`;
+        const pageResponse = await fetch(pageUrl);
+        if (!pageResponse.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const pageResult: AstronomicalObjectV2BaseResponse =
+          await pageResponse.json();
+        allData = allData.concat(pageResult.astronomicalObjects);
+      }
+
+      cacheRef.current.set(term, allData);
+      setData(allData);
+      setTotalPages(Math.ceil(totalElements / 10)); // Ensure totalElements corresponds to the API response structure
+
+      console.log(allData); // Log all data to console
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchData = async (term: string) => {
-      setIsLoading(true);
-      setError(null);
-      let allData: AstronomicalObject[] = [];
-      try {
-        const fetchPage = async (pageNumber: number) => {
-          const query = term ? `name=${encodeURIComponent(term)}` : '';
-          const url = `https://stapi.co/api/v2/rest/astronomicalObject/search?${query}&pageNumber=${pageNumber}&pageSize=100`;
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const result: ApiResponse = await response.json();
-          return result;
-        };
-
-        let result = await fetchPage(0);
-        allData = result.astronomicalObjects;
-
-        const totalElements = result.page.totalElements;
-        const totalPages = Math.ceil(totalElements / 100);
-
-        for (let i = 1; i < totalPages; i++) {
-          result = await fetchPage(i);
-          allData = allData.concat(result.astronomicalObjects);
-        }
-
-        setData(allData);
-        setTotalPages(totalPages);
-        console.log(allData); // Выводим все данные в консоль
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData(searchTerm);
-  }, [searchTerm]);
+  }, [searchTerm, fetchData]);
 
-  const handleSelectItem = (id: string) => {
-    navigate(`/?page=${page}&details=${id}&searchTerm=${searchTerm}`);
-  };
+  useEffect(() => {
+    const filtered = data.filter((item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    setFilteredData(filtered);
+  }, [data, searchTerm]);
 
-  const handlePageChange = (newPage: number) => {
-    navigate(`/?page=${newPage}&searchTerm=${searchTerm}`);
-  };
+  const handleSelectItem = useCallback(
+    (id: string) => {
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.set('details', id);
+      navigate(`/?${queryParams.toString()}`);
+    },
+    [navigate, location.search],
+  );
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.set('page', newPage.toString());
+      navigate(`/?${queryParams.toString()}`);
+    },
+    [navigate, location.search],
+  );
+
   return (
-    <div className="result-list" style={{ width: '50%' }}>
-      {data.length === 0 ? (
-        <div>No results found</div>
-      ) : (
-        <div className="card-container">
-          {data
-            .slice((page - 1) * 10, page * 10)
-            .map((item: AstronomicalObject) => (
-              <div
-                key={item.uid}
-                className="card"
-                onClick={() => handleSelectItem(item.uid)}
-              >
-                <h3>{item.name}</h3>
-                <p>{item.astronomicalObjectType}</p>
-                {item.location && (
-                  <p>
-                    Location: {item.location.name} (UID: {item.location.uid})
-                  </p>
-                )}
-              </div>
-            ))}
-        </div>
+    <div className="result-list" style={{ width: '100%' }}>
+      {isLoading && <div>Loading...</div>}
+      {error && <div>Error: {error}</div>}
+      {!isLoading && !error && (
+        <>
+          {filteredData.length === 0 ? (
+            <div>No results found</div>
+          ) : (
+            <div className="card-container">
+              {filteredData
+                .slice((page - 1) * 10, page * 10)
+                .map((item: AstronomicalObjectV2Base) => (
+                  <div
+                    key={item.uid}
+                    className="card"
+                    onClick={() => handleSelectItem(item.uid)}
+                  >
+                    <h3>{item.name}</h3>
+                    <p>{item.astronomicalObjectType}</p>
+                  </div>
+                ))}
+            </div>
+          )}
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
     </div>
   );
 };

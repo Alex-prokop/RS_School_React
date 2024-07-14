@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;
@@ -6,6 +7,12 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
+    setSearchTerm(savedSearchTerm);
+  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -13,9 +20,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   const handleSearch = () => {
     const trimmedSearchTerm = searchTerm.trim();
+    localStorage.setItem('searchTerm', trimmedSearchTerm);
     onSearch(trimmedSearchTerm);
+    navigate(`/?searchTerm=${trimmedSearchTerm}&page=1`);
   };
-
   return (
     <div
       style={{
