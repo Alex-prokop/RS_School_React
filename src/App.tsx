@@ -1,13 +1,11 @@
+// App.tsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
-import SearchBar from './components/SearchBar';
 import ErrorBoundary from './components/ErrorBoundary';
-import ThrowErrorButton from './components/ThrowErrorButton';
 import useSearchTerm from './hooks/useSearchTerm';
-import Details from './components/Details';
-import NotFound from './components/NotFound';
-import MainPage from './components/MainPage';
+import Header from './components/Header';
+import AppRoutes from './components/AppRoutes';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useSearchTerm('searchTerm');
@@ -24,24 +22,9 @@ const App = () => {
     <ErrorBoundary>
       <Router>
         <div className="App">
+          <Header onSearch={handleSearch} throwError={throwError} />
           <main>
-            <div
-              className="search-bar"
-              style={{ height: '5%', borderBottom: '1px solid #ccc' }}
-            >
-              <SearchBar onSearch={handleSearch} />
-              <ThrowErrorButton throwError={throwError} />
-            </div>
-            <div style={{ height: '95%', display: 'flex' }}>
-              <Routes>
-                <Route
-                  path="/"
-                  element={<MainPage searchTerm={searchTerm} />}
-                />
-                <Route path="/details/:id" element={<Details />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </div>
+            <AppRoutes searchTerm={searchTerm} />
           </main>
         </div>
       </Router>
@@ -50,4 +33,3 @@ const App = () => {
 };
 
 export default App;
-1;
