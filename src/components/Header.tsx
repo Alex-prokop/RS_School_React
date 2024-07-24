@@ -1,7 +1,9 @@
-// components/Header.tsx
+// src/components/Header.tsx
 import React from 'react';
 import SearchBar from './SearchBar';
 import ThrowErrorButton from './ThrowErrorButton';
+import ThemeSwitcher from './ThemeSwitcher';
+import styles from './Header.module.css';
 
 interface HeaderProps {
   onSearch: (term: string) => void;
@@ -10,10 +12,11 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onSearch, throwError }) => {
   return (
-    <div className="header">
-      <SearchBar onSearch={onSearch} />
+    <header className={styles.header}>
       <ThrowErrorButton throwError={throwError} />
-    </div>
+      <SearchBar onSearch={onSearch} />
+      <ThemeSwitcher />
+    </header>
   );
 };
 

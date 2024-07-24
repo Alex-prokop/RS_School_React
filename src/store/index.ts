@@ -8,6 +8,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(astronomicalObjectsApi.middleware),
 });
+console.log(store);
 
 setupListeners(store.dispatch);
 

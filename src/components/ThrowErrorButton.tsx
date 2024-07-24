@@ -1,7 +1,10 @@
 import React from 'react';
+import Button from './Button';
+import styles from './ThrowErrorButton.module.css';
 
 interface ThrowErrorButtonProps {
   throwError: () => void;
+  className?: string;
 }
 
 class ThrowErrorButton extends React.Component<ThrowErrorButtonProps> {
@@ -16,7 +19,11 @@ class ThrowErrorButton extends React.Component<ThrowErrorButtonProps> {
   };
 
   render() {
-    return <button onClick={this.handleClick}>Throw Error</button>;
+    return (
+      <Button className={styles.throwErrorButton} onClick={this.handleClick}>
+        Throw Error
+      </Button>
+    );
   }
 }
 

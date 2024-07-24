@@ -45,6 +45,8 @@ export const astronomicalObjectsApi = createApi({
     }),
   }),
 });
+// console.log(astronomicalObjectsApi.endpoints.getAstronomicalObjects);
+// console.log(astronomicalObjectsApi.endpoints.getAstronomicalObjectById);
 
 export const {
   useGetAstronomicalObjectsQuery,

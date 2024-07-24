@@ -1,0 +1,29 @@
+/* src/index.css */
+:root {
+  --background-color: #fff;
+  --text-color: #000;
+  --button-background-color: #007bff;
+  --button-hover-background-color: #0056b3;
+  --header-background-color: #f8f9fa;
+  --header-border-color: #e9ecef;
+}
+
+body.dark {
+  --background-color: #333;
+  --text-color: #fff;
+  --button-background-color: #6c757d;
+  --button-hover-background-color: #5a6268;
+  --header-background-color: #444;
+  --header-border-color: #555;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.App {
+  min-height: 100vh;
+}

@@ -6,7 +6,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import useSearchTerm from './hooks/useSearchTerm';
 import Header from './components/Header';
 import AppRoutes from './components/AppRoutes';
-import ThemeSwitcher from './components/ThemeSwitcher';
 import { useTheme } from './hooks/useTheme';
 
 const App = () => {
@@ -26,7 +25,6 @@ const App = () => {
       <Router>
         <div className={`App ${theme}`}>
           <Header onSearch={handleSearch} throwError={throwError} />
-          <ThemeSwitcher />
           <main>
             <AppRoutes searchTerm={searchTerm} />
           </main>

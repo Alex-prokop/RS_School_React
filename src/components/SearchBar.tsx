@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from './Button';
+import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;
@@ -24,23 +26,18 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     onSearch(trimmedSearchTerm);
     navigate(`/?searchTerm=${trimmedSearchTerm}&page=1`);
   };
+
   return (
-    <div
-      style={{
-        padding: '10px',
-        backgroundColor: '#e4e6bc',
-        display: 'flex',
-        gap: '10px',
-        justifyContent: 'center',
-      }}
-    >
+    <div className={styles.searchBar}>
       <input
         type="text"
         value={searchTerm}
         onChange={handleInputChange}
         placeholder="Search by name or type..."
       />
-      <button onClick={handleSearch}>Search</button>
+      <Button onClick={handleSearch} className={styles.searchButton}>
+        Search
+      </Button>
     </div>
   );
 };

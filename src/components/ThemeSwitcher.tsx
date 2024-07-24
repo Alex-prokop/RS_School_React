@@ -1,15 +1,20 @@
-// src/components/ThemeSwitcher.tsx
 import React from 'react';
 import { useTheme } from '../hooks/useTheme';
+import Button from './Button';
+import styles from './ThemeSwitcher.module.css';
 
-const ThemeSwitcher: React.FC = () => {
+interface ThemeSwitcherProps {
+  className?: string;
+}
+
+const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ className }) => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div>
-      <button onClick={toggleTheme}>
+    <div className={className}>
+      <Button className={styles.themeSwitcher} onClick={toggleTheme}>
         Switch to {theme === 'light' ? 'dark' : 'light'} theme
-      </button>
+      </Button>
     </div>
   );
 };
