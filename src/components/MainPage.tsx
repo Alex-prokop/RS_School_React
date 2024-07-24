@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import ResultList from './ResultList';
 import Details from './Details';
 import usePagination from '../components/usePagination';
+import Flyout from '../components/Flyout';
 
 interface MainPageProps {
   searchTerm: string;
@@ -41,6 +42,7 @@ const MainPage: React.FC<MainPageProps> = ({ searchTerm }) => {
           <Details />
         </div>
       )}
+      <Flyout />
     </div>
   );
 };
