@@ -1,20 +1,53 @@
-/* src/index.css */
 :root {
-  --background-color: #fff;
-  --text-color: #000;
-  --button-background-color: #007bff;
-  --button-hover-background-color: #0056b3;
-  --header-background-color: #f8f9fa;
-  --header-border-color: #e9ecef;
+  --background-color: #e0f7ff; 
+  --text-color: #1c1c2b;
+  --button-background-color: #62b1f6; 
+  --button-hover-background-color: #4a9fe0; 
+  --button-active-background-color: #3780b9; 
+  --button-text-color: #ffffff;
+  --button-border-color: #4a9fe0;
+  --header-background-color: #b3e5ff; 
+  --header-border-color: #99d4ff; 
+
+  /* Pagination specific colors for light theme */
+  --pagination-button-background: #b3e5ff; 
+  --pagination-button-hover-background: #99d4ff; 
+  --pagination-button-active-background: #80c3ff; 
+  --pagination-button-border-color: #99d4ff;
+  --pagination-button-text-color: #1c1c2b;
+
+  /* Result list and card specific colors for light theme */
+  --result-list-background-color: #ffffff;
+  --card-background-color: #e6f7ff; 
+  --card-border-color: #99d4ff; 
+  --card-box-shadow-color: rgba(0, 0, 0, 0.1);
+  --card-text-color: #1c1c2b;
 }
 
 body.dark {
-  --background-color: #333;
-  --text-color: #fff;
-  --button-background-color: #6c757d;
-  --button-hover-background-color: #5a6268;
-  --header-background-color: #444;
-  --header-border-color: #555;
+  --background-color: #1c1c2b;
+  --text-color: #d3d4db;
+  --button-background-color: #3b4a6b;
+  --button-hover-background-color: #4a5a7f;
+  --button-active-background-color: #5c6a92;
+  --button-text-color: #fff;
+  --button-border-color: #3b4a6b;
+  --header-background-color: #2a2a3b;
+  --header-border-color: #444454;
+
+  /* Pagination specific colors for dark theme */
+  --pagination-button-background: #2a2a3b;
+  --pagination-button-hover-background: #3b4a6b;
+  --pagination-button-active-background: #5c6a92;
+  --pagination-button-border-color: #3b4a6b;
+  --pagination-button-text-color: #d3d4db;
+
+  /* Result list and card specific colors for dark theme */
+  --result-list-background-color: #2a2a3b;
+  --card-background-color: #3b4a6b;
+  --card-border-color: #444454;
+  --card-box-shadow-color: rgba(0, 0, 0, 0.5);
+  --card-text-color: #d3d4db;
 }
 
 body {
@@ -22,8 +55,4 @@ body {
   color: var(--text-color);
   margin: 0;
   font-family: Arial, sans-serif;
-}
-
-.App {
-  min-height: 100vh;
 }

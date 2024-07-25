@@ -1,9 +1,12 @@
-import React from 'react';
+// src/components/MainPage.tsx
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ResultList from './ResultList';
 import Details from './Details';
 import usePagination from '../components/usePagination';
 import Flyout from '../components/Flyout';
+import Pagination from './Pagination';
+import './MainPage.css';
 
 interface MainPageProps {
   searchTerm: string;
@@ -14,6 +17,7 @@ const MainPage: React.FC<MainPageProps> = ({ searchTerm }) => {
   const queryParams = new URLSearchParams(location.search);
   const detailsId = queryParams.get('details');
   const { page, setPage } = usePagination();
+  const [totalPages, setTotalPages] = useState(1);
 
   const handleClickLeftSection = () => {
     queryParams.delete('details');
@@ -21,27 +25,30 @@ const MainPage: React.FC<MainPageProps> = ({ searchTerm }) => {
   };
 
   return (
-    <div style={{ display: 'flex', width: '100%' }}>
-      <div
-        style={{ width: detailsId ? '50%' : '100%' }}
-        onClick={handleClickLeftSection}
-      >
-        <ResultList searchTerm={searchTerm} page={page} setPage={setPage} />
-      </div>
-      {detailsId && (
+    <div className="main-page">
+      <div className="content-container">
         <div
-          className="details-panel"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '50%',
-            borderLeft: '1px solid #ccc',
-          }}
+          className={`left-section ${detailsId ? 'details-visible' : ''}`}
+          onClick={handleClickLeftSection}
         >
-          <Details />
+          <ResultList
+            searchTerm={searchTerm}
+            page={page}
+            setPage={setPage}
+            setTotalPages={setTotalPages}
+          />
         </div>
-      )}
+        {detailsId && (
+          <div className="details-panel">
+            <Details />
+          </div>
+        )}
+      </div>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
       <Flyout />
     </div>
   );

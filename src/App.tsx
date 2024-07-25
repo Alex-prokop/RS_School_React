@@ -6,7 +6,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import useSearchTerm from './hooks/useSearchTerm';
 import Header from './components/Header';
 import Footer from './components/Footer';
-
 import AppRoutes from './components/AppRoutes';
 import { useTheme } from './hooks/useTheme';
 

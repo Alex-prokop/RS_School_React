@@ -1,0 +1,32 @@
+/* src/components/MainPage.css */
+.main-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Убедитесь, что main-page занимает все оставшееся пространство */
+  overflow: hidden;
+}
+
+.content-container {
+  display: flex;
+  flex: 1; /* Убедитесь, что content-container занимает все оставшееся пространство */
+}
+
+.left-section {
+  width: 100%;
+  transition: width 0.3s ease;
+  overflow-y: auto;
+}
+
+.left-section.details-visible {
+  width: 50%;
+}
+
+.details-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  border-left: 1px solid #ccc;
+  transition: width 0.3s ease;
+  overflow-y: auto;
+}

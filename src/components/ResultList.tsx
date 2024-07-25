@@ -6,16 +6,20 @@ import { useGetAstronomicalObjectsQuery } from '../services/astronomicalObjectsA
 import { RootState } from '../store';
 import { selectItem, unselectItem } from '../features/astronomicalObjectsSlice';
 import './ResultList.css';
-import Pagination from './Pagination';
 import { useTheme } from '../hooks/useTheme';
 
 interface ResultsProps {
   searchTerm: string;
   page: number;
   setPage: (page: number) => void;
+  setTotalPages: (totalPages: number) => void;
 }
 
-const ResultList: React.FC<ResultsProps> = ({ searchTerm, page, setPage }) => {
+const ResultList: React.FC<ResultsProps> = ({
+  searchTerm,
+  page,
+  setTotalPages,
+}) => {
   const { theme } = useTheme();
   const { data, isLoading, error } = useGetAstronomicalObjectsQuery({
     name: searchTerm,
@@ -43,6 +47,12 @@ const ResultList: React.FC<ResultsProps> = ({ searchTerm, page, setPage }) => {
   useEffect(() => {
     localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
   }, [selectedItems]);
+
+  useEffect(() => {
+    if (data?.page?.totalPages) {
+      setTotalPages(data.page.totalPages);
+    }
+  }, [data, setTotalPages]);
 
   const handleSelect = (item: AstronomicalObjectV2Base) => {
     dispatch(selectItem(item));
@@ -105,17 +115,13 @@ const ResultList: React.FC<ResultsProps> = ({ searchTerm, page, setPage }) => {
                           ? handleUnselect(item.uid)
                           : handleSelect(item);
                       }}
+                      onClick={(e) => e.stopPropagation()}
                     />
                   </div>
                 )
               )}
             </div>
           )}
-          <Pagination
-            currentPage={page}
-            totalPages={data?.page?.totalPages || 1}
-            onPageChange={setPage}
-          />
         </>
       )}
     </div>
@@ -123,3 +129,4 @@ const ResultList: React.FC<ResultsProps> = ({ searchTerm, page, setPage }) => {
 };
 
 export default ResultList;
+1;

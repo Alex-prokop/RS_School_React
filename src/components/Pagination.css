@@ -8,20 +8,23 @@
 
 .pagination button {
   padding: 5px 10px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
+  border: 1px solid var(--pagination-button-border-color);
   cursor: pointer;
   font-size: 14px;
   border-radius: 3px;
-  transition: background-color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+  background-color: var(--pagination-button-background);
+  color: var(--pagination-button-text-color);
 }
 
 .pagination button:hover {
-  background-color: #e4e6bc;
+  background-color: var(--pagination-button-hover-background);
 }
 
 .pagination button.active {
-  background-color: #d4d4a0;
+  background-color: var(--pagination-button-active-background);
   font-weight: bold;
   cursor: default;
 }

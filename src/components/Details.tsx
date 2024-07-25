@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useGetAstronomicalObjectByIdQuery } from '../services/astronomicalObjectsApi';
+import './Details.css';
 
 const Details: React.FC = () => {
   const location = useLocation();
@@ -30,30 +31,39 @@ const Details: React.FC = () => {
   const { astronomicalObject } = data;
 
   return (
-    <div className="card">
+    <div className="details-card">
+      <button onClick={handleClose}>&#x2715;</button>
+
       <h2>{astronomicalObject.name}</h2>
       <p>Type: {astronomicalObject.astronomicalObjectType}</p>
+
       {astronomicalObject.location && (
-        <p>
-          Location: {astronomicalObject.location.name} (UID:{' '}
-          {astronomicalObject.location.uid})
-        </p>
-      )}
-      {astronomicalObject.astronomicalObjects && (
         <div>
-          <h3>Contained Objects:</h3>
-          <ul>
-            {astronomicalObject.astronomicalObjects.map((obj) => (
-              <li key={obj.uid}>
-                {obj.name} ({obj.astronomicalObjectType})
-              </li>
-            ))}
-          </ul>
+          <h3>Location</h3>
+          <p>Name: {astronomicalObject.location.name}</p>
+          <p>Type: {astronomicalObject.location.astronomicalObjectType}</p>
+          {astronomicalObject.location.location && (
+            <p>Parent Location: {astronomicalObject.location.location.name}</p>
+          )}
         </div>
       )}
-      <button onClick={handleClose}>Close</button>
+
+      {astronomicalObject.astronomicalObjects &&
+        astronomicalObject.astronomicalObjects.length > 0 && (
+          <div>
+            <h3>Contained Objects:</h3>
+            <ul>
+              {astronomicalObject.astronomicalObjects.map((obj) => (
+                <li key={obj.uid}>
+                  {obj.name} ({obj.astronomicalObjectType})
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
     </div>
   );
 };
 
 export default Details;
+1;

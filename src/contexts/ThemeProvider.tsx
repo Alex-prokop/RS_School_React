@@ -1,4 +1,3 @@
-// src/contexts/ThemeProvider.tsx
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
@@ -15,14 +14,10 @@ export const ThemeContext = createContext<ThemeContextProps | undefined>(
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [theme, setTheme] = useState<Theme>('light');
-
-  useEffect(() => {
+  const [theme, setTheme] = useState<Theme>(() => {
     const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
+    return savedTheme || 'light';
+  });
 
   useEffect(() => {
     document.body.className = theme;
