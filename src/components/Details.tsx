@@ -22,7 +22,13 @@ const Details: React.FC = () => {
     return <div>Loading...</div>;
   }
   if (error) {
-    return <div>Error: {error.message}</div>;
+    const errorMessage =
+      'status' in error && error.status
+        ? `Error: ${error.status}`
+        : 'message' in error
+          ? `Error: ${error.message}`
+          : 'Unknown error';
+    return <div>{errorMessage}</div>;
   }
   if (!data || !data.astronomicalObject) {
     return <div>No details available</div>;
@@ -41,7 +47,6 @@ const Details: React.FC = () => {
         <div>
           <h3>Location</h3>
           <p>Name: {astronomicalObject.location.name}</p>
-          <p>Type: {astronomicalObject.location.astronomicalObjectType}</p>
           {astronomicalObject.location.location && (
             <p>Parent Location: {astronomicalObject.location.location.name}</p>
           )}
@@ -66,4 +71,3 @@ const Details: React.FC = () => {
 };
 
 export default Details;
-1;

@@ -1,25 +1,25 @@
 :root {
-  --background-color: #e0f7ff; 
+  --background-color: #e0f7ff;
   --text-color: #1c1c2b;
-  --button-background-color: #62b1f6; 
-  --button-hover-background-color: #4a9fe0; 
-  --button-active-background-color: #3780b9; 
+  --button-background-color: #62b1f6;
+  --button-hover-background-color: #4a9fe0;
+  --button-active-background-color: #3780b9;
   --button-text-color: #ffffff;
   --button-border-color: #4a9fe0;
-  --header-background-color: #b3e5ff; 
-  --header-border-color: #99d4ff; 
+  --header-background-color: #b3e5ff;
+  --header-border-color: #99d4ff;
 
   /* Pagination specific colors for light theme */
-  --pagination-button-background: #b3e5ff; 
-  --pagination-button-hover-background: #99d4ff; 
-  --pagination-button-active-background: #80c3ff; 
+  --pagination-button-background: #b3e5ff;
+  --pagination-button-hover-background: #99d4ff;
+  --pagination-button-active-background: #80c3ff;
   --pagination-button-border-color: #99d4ff;
   --pagination-button-text-color: #1c1c2b;
 
   /* Result list and card specific colors for light theme */
   --result-list-background-color: #ffffff;
-  --card-background-color: #e6f7ff; 
-  --card-border-color: #99d4ff; 
+  --card-background-color: #e6f7ff;
+  --card-border-color: #99d4ff;
   --card-box-shadow-color: rgba(0, 0, 0, 0.1);
   --card-text-color: #1c1c2b;
 }

@@ -24,6 +24,7 @@ const ResultList: React.FC<ResultsProps> = ({
   const { data, isLoading, error } = useGetAstronomicalObjectsQuery({
     name: searchTerm,
     page,
+    pageSize: 10,
   });
   const dispatch = useDispatch();
   const selectedItems = useSelector(
@@ -82,7 +83,15 @@ const ResultList: React.FC<ResultsProps> = ({
   return (
     <div className={`result-list ${theme}`} style={{ width: '100%' }}>
       {isLoading && <div>Loading...</div>}
-      {error && <div>Error: {error.message}</div>}
+      {error && (
+        <div>
+          Error:{' '}
+          {'data' in error
+            ? (error.data as { message?: string }).message ||
+              'An error occurred'
+            : (error as Error).message}
+        </div>
+      )}
       {!isLoading && !error && (
         <>
           {data?.astronomicalObjects.length === 0 ? (
@@ -129,4 +138,3 @@ const ResultList: React.FC<ResultsProps> = ({
 };
 
 export default ResultList;
-1;
