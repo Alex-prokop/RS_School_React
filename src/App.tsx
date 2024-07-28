@@ -1,0 +1,35 @@
+// App.tsx
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import './App.css';
+import ErrorBoundary from './components/ErrorBoundary';
+import useSearchTerm from './hooks/useSearchTerm';
+import Header from './components/Header';
+import AppRoutes from './components/AppRoutes';
+
+const App = () => {
+  const [searchTerm, setSearchTerm] = useSearchTerm('searchTerm');
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+  };
+
+  const throwError = () => {
+    throw new Error('Test error');
+  };
+
+  return (
+    <ErrorBoundary>
+      <Router>
+        <div className="App">
+          <Header onSearch={handleSearch} throwError={throwError} />
+          <main>
+            <AppRoutes searchTerm={searchTerm} />
+          </main>
+        </div>
+      </Router>
+    </ErrorBoundary>
+  );
+};
+
+export default App;
