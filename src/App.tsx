@@ -1,52 +1,39 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
-import SearchBar from './components/SearchBar';
 import ErrorBoundary from './components/ErrorBoundary';
-import ResultList from './components/ResultList';
-import ThrowErrorButton from './components/ThrowErrorButton';
+import useSearchTerm from './hooks/useSearchTerm';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import AppRoutes from './components/AppRoutes';
+import { useTheme } from './hooks/useTheme';
 
-interface AppState {
-  searchTerm: string;
-}
+const App = () => {
+  const [searchTerm, setSearchTerm] = useSearchTerm('searchTerm');
+  const { theme } = useTheme();
 
-class App extends Component<{}, AppState> {
-  constructor(props: {}) {
-    super(props);
-    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
-    this.state = {
-      searchTerm: savedSearchTerm,
-    };
-  }
-
-  handleSearch = (searchTerm: string) => {
-    this.setState({ searchTerm });
+  const handleSearch = (term: string) => {
+    console.log('App handleSearch:', term);
+    setSearchTerm(term);
   };
 
-  throwError = () => {
+  const throwError = () => {
     throw new Error('Test error');
   };
 
-  render() {
-    console.log('App render');
-    return (
-      <ErrorBoundary>
-        <div className="App">
+  return (
+    <ErrorBoundary>
+      <Router>
+        <div className={`App ${theme}`}>
+          <Header onSearch={handleSearch} throwError={throwError} />
           <main>
-            <div
-              className="search-bar"
-              style={{ height: '5%', borderBottom: '1px solid #ccc' }}
-            >
-              <SearchBar onSearch={this.handleSearch} />
-              <ThrowErrorButton throwError={this.throwError} />
-            </div>
-            <div style={{ height: '95%' }}>
-              <ResultList searchTerm={this.state.searchTerm} />
-            </div>
+            <AppRoutes searchTerm={searchTerm} />
           </main>
+          <Footer />
         </div>
-      </ErrorBoundary>
-    );
-  }
-}
+      </Router>
+    </ErrorBoundary>
+  );
+};
 
 export default App;

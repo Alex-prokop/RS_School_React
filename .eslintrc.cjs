@@ -24,9 +24,10 @@ module.exports = {
       { allowConstantExport: true },
     ],
     '@typescript-eslint/no-explicit-any': 'error',
-    'react/jsx-uses-react': 'error',
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
     'react/jsx-uses-vars': 'error',
-    'react/jsx-no-target-blank': 'error', // Правило для target="_blank" без rel="noreferrer"
+    'react/jsx-no-target-blank': 'error',
     '@typescript-eslint/ban-types': [
       'error',
       {

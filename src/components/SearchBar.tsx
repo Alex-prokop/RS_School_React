@@ -1,54 +1,45 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Button from './Button';
+import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;
 }
 
-interface SearchBarState {
-  searchTerm: string;
-}
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const navigate = useNavigate();
 
-class SearchBar extends Component<SearchBarProps, SearchBarState> {
-  constructor(props: SearchBarProps) {
-    super(props);
+  useEffect(() => {
     const savedSearchTerm = localStorage.getItem('searchTerm') || '';
-    this.state = {
-      searchTerm: savedSearchTerm,
-    };
-  }
+    setSearchTerm(savedSearchTerm);
+  }, []);
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerm: event.target.value });
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
-  handleSearch = () => {
-    const { searchTerm } = this.state;
+  const handleSearch = () => {
     const trimmedSearchTerm = searchTerm.trim();
     localStorage.setItem('searchTerm', trimmedSearchTerm);
-    this.props.onSearch(trimmedSearchTerm);
+    onSearch(trimmedSearchTerm);
+    navigate(`/?searchTerm=${trimmedSearchTerm}&page=1`);
   };
 
-  render() {
-    return (
-      <div
-        style={{
-          padding: '10px',
-          backgroundColor: '#e4e6bc',
-          display: 'flex',
-          gap: '10px',
-          justifyContent: 'center',
-        }}
-      >
-        <input
-          type="text"
-          value={this.state.searchTerm}
-          onChange={this.handleInputChange}
-          placeholder="Search by name or type..."
-        />
-        <button onClick={this.handleSearch}>Search</button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles.searchBar}>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleInputChange}
+        placeholder="Search by name or type..."
+      />
+      <Button onClick={handleSearch} className={styles.searchButton}>
+        Search
+      </Button>
+    </div>
+  );
+};
 
 export default SearchBar;

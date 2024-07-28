@@ -1,101 +1,140 @@
-import React, { Component } from 'react';
-import { AstronomicalObject, ApiResponse } from '../types';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AstronomicalObjectV2Base } from '../types';
+import { useGetAstronomicalObjectsQuery } from '../services/astronomicalObjectsApi';
+import { RootState } from '../store';
+import { selectItem, unselectItem } from '../features/astronomicalObjectsSlice';
 import './ResultList.css';
+import { useTheme } from '../hooks/useTheme';
 
 interface ResultsProps {
   searchTerm: string;
+  page: number;
+  setPage: (page: number) => void;
+  setTotalPages: (totalPages: number) => void;
 }
 
-interface ResultsState {
-  data: AstronomicalObject[];
-  isLoading: boolean;
-  error: string | null;
-}
+const ResultList: React.FC<ResultsProps> = ({
+  searchTerm,
+  page,
+  setTotalPages,
+}) => {
+  const { theme } = useTheme();
+  const { data, isLoading, error } = useGetAstronomicalObjectsQuery({
+    name: searchTerm,
+    page,
+    pageSize: 10,
+  });
+  const dispatch = useDispatch();
+  const selectedItems = useSelector(
+    (state: RootState) => state.astronomicalObjects.selectedItems
+  );
+  const cardContainerRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-class ResultList extends Component<ResultsProps, ResultsState> {
-  constructor(props: ResultsProps) {
-    super(props);
-    this.state = {
-      data: [],
-      isLoading: false,
-      error: null,
-    };
-  }
-
-  componentDidMount() {
-    console.log('ResultList mounted');
-    this.fetchData(this.props.searchTerm);
-  }
-
-  componentDidUpdate(prevProps: ResultsProps) {
-    if (prevProps.searchTerm !== this.props.searchTerm) {
-      console.log('ResultList updated with new search term');
-      this.fetchData(this.props.searchTerm);
-    }
-  }
-
-  fetchData = async (searchTerm: string) => {
-    console.log('Fetching data with search term:', searchTerm);
-    this.setState({ isLoading: true, error: null });
-    try {
-      const query = searchTerm ? `name=${encodeURIComponent(searchTerm)}` : '';
-      const url = `https://stapi.co/api/v2/rest/astronomicalObject/search?${query}&pageNumber=0&pageSize=10`;
-      console.log('Fetching URL:', url);
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const result: ApiResponse = await response.json();
-      console.log('API Response:', result);
-
-      // Фильтрация на стороне клиента
-      const filteredData = result.astronomicalObjects.filter((obj) => {
-        const term = searchTerm.toLowerCase();
-        const nameMatches = obj.name.toLowerCase().includes(term);
-        const typeMatches = obj.astronomicalObjectType
-          .toLowerCase()
-          .includes(term);
-
-        return nameMatches || typeMatches;
+  useEffect(() => {
+    const savedSelectedItems = localStorage.getItem('selectedItems');
+    if (savedSelectedItems) {
+      const parsedItems: AstronomicalObjectV2Base[] =
+        JSON.parse(savedSelectedItems);
+      parsedItems.forEach((item) => {
+        dispatch(selectItem(item));
       });
+    }
+  }, [dispatch]);
 
-      this.setState({ data: filteredData, isLoading: false });
-    } catch (error) {
-      this.setState({ error: error.message, isLoading: false });
+  useEffect(() => {
+    localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+  }, [selectedItems]);
+
+  useEffect(() => {
+    if (data?.page?.totalPages) {
+      setTotalPages(data.page.totalPages);
+    }
+  }, [data, setTotalPages]);
+
+  const handleSelect = (item: AstronomicalObjectV2Base) => {
+    dispatch(selectItem(item));
+  };
+
+  const handleUnselect = (uid: string) => {
+    dispatch(unselectItem(uid));
+  };
+
+  const handleSelectItem = useCallback(
+    (id: string) => {
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.set('details', id);
+      navigate(`/?${queryParams.toString()}`);
+    },
+    [navigate, location.search]
+  );
+
+  const handleClickContainer = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === cardContainerRef.current) {
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.delete('details');
+      navigate(`/?${queryParams.toString()}`);
     }
   };
 
-  render() {
-    const { data, isLoading, error } = this.state;
-    console.log('Rendering data:', data);
-    if (isLoading) {
-      return <div>Loading...</div>;
-    }
-    if (error) {
-      return <div>Error: {error}</div>;
-    }
-    return (
-      <div className="result-list">
-        {data.length === 0 ? (
-          <div>No results found</div>
-        ) : (
-          <div className="card-container">
-            {data.map((item: AstronomicalObject) => (
-              <div key={item.uid} className="card">
-                <h3>{item.name}</h3>
-                <p>{item.astronomicalObjectType}</p>
-                {item.location && (
-                  <p>
-                    Location: {item.location.name} (UID: {item.location.uid})
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-}
+  return (
+    <div className={`result-list ${theme}`} style={{ width: '100%' }}>
+      {isLoading && <div>Loading...</div>}
+      {error && (
+        <div>
+          Error:{' '}
+          {'data' in error
+            ? (error.data as { message?: string }).message ||
+              'An error occurred'
+            : (error as Error).message}
+        </div>
+      )}
+      {!isLoading && !error && (
+        <>
+          {data?.astronomicalObjects.length === 0 ? (
+            <div>No results found</div>
+          ) : (
+            <div
+              ref={cardContainerRef}
+              className="card-container"
+              onClick={handleClickContainer}
+            >
+              {data?.astronomicalObjects.map(
+                (item: AstronomicalObjectV2Base) => (
+                  <div
+                    key={item.uid}
+                    className="card"
+                    onClick={() => handleSelectItem(item.uid)}
+                  >
+                    <h3>{item.name}</h3>
+                    <p>{item.astronomicalObjectType}</p>
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.some(
+                        (selected) => selected.uid === item.uid
+                      )}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        selectedItems.some(
+                          (selected) => selected.uid === item.uid
+                        )
+                          ? handleUnselect(item.uid)
+                          : handleSelect(item);
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+                )
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
 
 export default ResultList;
