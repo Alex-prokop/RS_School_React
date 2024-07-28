@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1722170485693" clover="3.2.0">
-  <project timestamp="1722170485693" name="All files">
-    <metrics statements="270" coveredstatements="149" conditionals="85" coveredconditionals="23" methods="69" coveredmethods="36" elements="424" coveredelements="208" complexity="0" loc="270" ncloc="270" packages="6" files="20" classes="20"/>
-    <package name="components">
+<coverage generated="1722198288928" clover="3.2.0">
+  <project timestamp="1722198288928" name="All files">
+    <metrics statements="297" coveredstatements="157" conditionals="85" coveredconditionals="26" methods="72" coveredmethods="39" elements="454" coveredelements="222" complexity="0" loc="297" ncloc="297" packages="7" files="22" classes="22"/>
+    <package name="src">
+      <metrics statements="27" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <file name="App.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/App.tsx">
+        <metrics statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+      </file>
+      <file name="main.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/main.tsx">
+        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components">
       <metrics statements="196" coveredstatements="85" conditionals="62" coveredconditionals="15" methods="47" coveredmethods="20"/>
-      <file name="AppRoutes.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/AppRoutes.tsx">
+      <file name="AppRoutes.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/AppRoutes.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -14,14 +50,14 @@
         <line num="13" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
       </file>
-      <file name="Button.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/Button.tsx">
+      <file name="Button.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/Button.tsx">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="3" count="3" type="stmt"/>
         <line num="11" count="9" type="stmt"/>
         <line num="12" count="9" type="stmt"/>
         <line num="19" count="3" type="stmt"/>
       </file>
-      <file name="ErrorBoundary.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/ErrorBoundary.tsx">
+      <file name="ErrorBoundary.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/ErrorBoundary.tsx">
         <metrics statements="15" coveredstatements="15" conditionals="9" coveredconditionals="9" methods="5" coveredmethods="5"/>
         <line num="1" count="1" type="stmt"/>
         <line num="13" count="1" type="stmt"/>
@@ -39,14 +75,14 @@
         <line num="47" count="1" type="stmt"/>
         <line num="49" count="1" type="stmt"/>
       </file>
-      <file name="Footer.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/Footer.tsx">
+      <file name="Footer.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/Footer.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
       </file>
-      <file name="Header.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/Header.tsx">
+      <file name="Header.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/Header.tsx">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -56,7 +92,7 @@
         <line num="14" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
       </file>
-      <file name="MainPage.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/MainPage.tsx">
+      <file name="MainPage.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/MainPage.tsx">
         <metrics statements="19" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="2" count="0" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
@@ -78,13 +114,13 @@
         <line num="27" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
       </file>
-      <file name="NotFound.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/NotFound.tsx">
+      <file name="NotFound.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/NotFound.tsx">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
       </file>
-      <file name="Pagination.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/Pagination.tsx">
+      <file name="Pagination.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/Pagination.tsx">
         <metrics statements="24" coveredstatements="21" conditionals="4" coveredconditionals="3" methods="7" coveredmethods="5"/>
         <line num="2" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
@@ -111,7 +147,7 @@
         <line num="56" count="0" type="stmt"/>
         <line num="65" count="1" type="stmt"/>
       </file>
-      <file name="ResultList.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/ResultList.tsx">
+      <file name="ResultList.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/ResultList.tsx">
         <metrics statements="52" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="16" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -166,7 +202,7 @@
         <line num="127" count="0" type="stmt"/>
         <line num="140" count="0" type="stmt"/>
       </file>
-      <file name="SearchBar.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/SearchBar.tsx">
+      <file name="SearchBar.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/SearchBar.tsx">
         <metrics statements="19" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
@@ -188,7 +224,7 @@
         <line num="30" count="7" type="stmt"/>
         <line num="45" count="2" type="stmt"/>
       </file>
-      <file name="ThemeSwitcher.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/ThemeSwitcher.tsx">
+      <file name="ThemeSwitcher.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/ThemeSwitcher.tsx">
         <metrics statements="7" coveredstatements="7" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
@@ -198,7 +234,7 @@
         <line num="13" count="2" type="stmt"/>
         <line num="22" count="2" type="stmt"/>
       </file>
-      <file name="ThrowErrorButton.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/ThrowErrorButton.tsx">
+      <file name="ThrowErrorButton.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/ThrowErrorButton.tsx">
         <metrics statements="13" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -214,7 +250,7 @@
         <line num="28" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
       </file>
-      <file name="usePagination.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/components/usePagination.ts">
+      <file name="usePagination.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/components/usePagination.ts">
         <metrics statements="22" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -240,9 +276,9 @@
         <line num="35" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="contexts">
+    <package name="src.contexts">
       <metrics statements="13" coveredstatements="12" conditionals="4" coveredconditionals="2" methods="5" coveredmethods="3"/>
-      <file name="ThemeProvider.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/contexts/ThemeProvider.tsx">
+      <file name="ThemeProvider.tsx" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/contexts/ThemeProvider.tsx">
         <metrics statements="13" coveredstatements="12" conditionals="4" coveredconditionals="2" methods="5" coveredmethods="3"/>
         <line num="1" count="3" type="stmt"/>
         <line num="10" count="3" type="stmt"/>
@@ -259,9 +295,9 @@
         <line num="31" count="4" type="stmt"/>
       </file>
     </package>
-    <package name="features">
+    <package name="src.features">
       <metrics statements="20" coveredstatements="20" conditionals="1" coveredconditionals="1" methods="8" coveredmethods="8"/>
-      <file name="astronomicalObjectsSlice.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/features/astronomicalObjectsSlice.ts">
+      <file name="astronomicalObjectsSlice.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/features/astronomicalObjectsSlice.ts">
         <metrics statements="20" coveredstatements="20" conditionals="1" coveredconditionals="1" methods="8" coveredmethods="8"/>
         <line num="1" count="2" type="stmt"/>
         <line num="13" count="2" type="stmt"/>
@@ -285,20 +321,20 @@
         <line num="63" count="2" type="stmt"/>
       </file>
     </package>
-    <package name="hooks">
-      <metrics statements="15" coveredstatements="6" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="1"/>
-      <file name="useSearchTerm.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/hooks/useSearchTerm.ts">
-        <metrics statements="8" coveredstatements="0" conditionals="3" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="1" count="0" type="stmt"/>
-        <line num="3" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="4" count="0" type="stmt"/>
-        <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
+    <package name="src.hooks">
+      <metrics statements="15" coveredstatements="14" conditionals="4" coveredconditionals="3" methods="4" coveredmethods="4"/>
+      <file name="useSearchTerm.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/hooks/useSearchTerm.ts">
+        <metrics statements="8" coveredstatements="8" conditionals="3" coveredconditionals="3" methods="3" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="11" type="cond" truecount="1" falsecount="0"/>
+        <line num="4" count="6" type="stmt"/>
+        <line num="5" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="6" type="stmt"/>
+        <line num="9" count="6" type="stmt"/>
+        <line num="12" count="6" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
       </file>
-      <file name="useTheme.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/hooks/useTheme.ts">
+      <file name="useTheme.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/hooks/useTheme.ts">
         <metrics statements="7" coveredstatements="6" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
@@ -309,9 +345,9 @@
         <line num="10" count="2" type="stmt"/>
       </file>
     </package>
-    <package name="services">
+    <package name="src.services">
       <metrics statements="12" coveredstatements="12" conditionals="14" coveredconditionals="5" methods="3" coveredmethods="3"/>
-      <file name="astronomicalObjectsApi.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/services/astronomicalObjectsApi.ts">
+      <file name="astronomicalObjectsApi.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/services/astronomicalObjectsApi.ts">
         <metrics statements="12" coveredstatements="12" conditionals="14" coveredconditionals="5" methods="3" coveredmethods="3"/>
         <line num="1" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
@@ -327,9 +363,9 @@
         <line num="72" count="1" type="stmt"/>
       </file>
     </package>
-    <package name="store">
+    <package name="src.store">
       <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
-      <file name="index.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/store/index.ts">
+      <file name="index.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/store/index.ts">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -341,7 +377,7 @@
         <line num="17" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
       </file>
-      <file name="rootReducer.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/RS/Cool/RS_School_React/src/store/rootReducer.ts">
+      <file name="rootReducer.ts" path="/Users/alexandr_prokopovich/Library/Mobile Documents/com~apple~CloudDocs/Documents/git/React/RS_School_React/src/store/rootReducer.ts">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
