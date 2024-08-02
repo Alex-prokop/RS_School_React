@@ -1,0 +1,46 @@
+.details-card {
+  background-color: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 2px 5px var(--card-box-shadow-color);
+  position: relative; /* Для позиционирования кнопки закрытия */
+  margin: 20px auto; /* Центрирование карточки */
+}
+
+.details-card h2 {
+  margin-top: 0;
+  color: var(--card-text-color);
+}
+
+.details-card p {
+  margin: 5px 0;
+  color: var(--card-text-color);
+}
+
+.details-card button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--card-text-color);
+  background-color: var(--button-background-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.details-card ul {
+  padding-left: 20px;
+}
+
+.details-card li {
+  color: var(--card-text-color);
+}
