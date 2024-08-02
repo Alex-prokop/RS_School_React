@@ -5,7 +5,7 @@ import { AstronomicalObjectV2Base } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useGetAstronomicalObjectsQuery } from '../services/astronomicalObjectsApi';
-import { RootState } from '../store';
+import { RootState } from '../store/index';
 import { selectItem, unselectItem } from '../services/astronomicalObjectsSlice';
 import { useTheme } from '../hooks/useTheme';
 
@@ -91,13 +91,15 @@ const ResultList: React.FC<ResultsProps> = ({
             <div
               ref={cardContainerRef}
               className="card-container"
-              onClick={handleClickContainer}>
+              onClick={handleClickContainer}
+            >
               {data?.astronomicalObjects.map(
                 (item: AstronomicalObjectV2Base) => (
                   <div
                     key={item.uid}
                     className="card"
-                    onClick={() => handleSelectItem(item.uid)}>
+                    onClick={() => handleSelectItem(item.uid)}
+                  >
                     <h3>{item.name}</h3>
                     <p>{item.astronomicalObjectType}</p>
                     <input

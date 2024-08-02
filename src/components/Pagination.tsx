@@ -43,20 +43,23 @@ const Pagination: React.FC<PaginationProps> = ({
     <div className="pagination">
       <button
         onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-        disabled={currentPage === 1}>
+        disabled={currentPage === 1}
+      >
         «
       </button>
       {getPageNumbers().map((page) => (
         <button
           key={page}
           onClick={() => handlePageChange(page)}
-          className={page === currentPage ? 'active' : ''}>
+          className={page === currentPage ? 'active' : ''}
+        >
           {page}
         </button>
       ))}
       <button
         onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-        disabled={currentPage === totalPages}>
+        disabled={currentPage === totalPages}
+      >
         »
       </button>
     </div>

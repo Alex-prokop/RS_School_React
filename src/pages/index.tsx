@@ -24,7 +24,8 @@ const MainPage: React.FC = () => {
       <div className="content-container">
         <div
           className={`left-section ${detailsId ? 'details-visible' : ''}`}
-          onClick={handleClickLeftSection}>
+          onClick={handleClickLeftSection}
+        >
           <ResultList
             searchTerm={(query.searchTerm as string) || ''}
             page={page}

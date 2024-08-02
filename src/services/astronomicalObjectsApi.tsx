@@ -34,7 +34,7 @@ export const astronomicalObjectsApi = createApi({
         });
         return {
           url: 'astronomicalObject/search',
-          method: name ? 'POST' : 'GET', // Используем GET для пагинации и POST для поиска
+          method: name ? 'POST' : 'GET',
           params: name
             ? undefined
             : {

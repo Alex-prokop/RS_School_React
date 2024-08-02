@@ -1,6 +1,6 @@
 // components/Flyout.tsx
 import React, { useState, useEffect } from 'react';
-import { RootState } from '../store';
+import { RootState } from '../store/index';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
