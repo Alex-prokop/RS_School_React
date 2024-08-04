@@ -1,3 +1,4 @@
+// src/services/astronomicalObjectsApi.tsx
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   AstronomicalObjectV2BaseResponse,
@@ -25,29 +26,37 @@ export const astronomicalObjectsApi = createApi({
         astronomicalObjectType,
         locationUid,
       }) => {
+        const pageNumberStr = (page - 1)?.toString();
+        const pageSizeStr = pageSize?.toString();
+
+        if (!pageNumberStr || !pageSizeStr) {
+          throw new Error('Page and PageSize must be defined');
+        }
+
         console.log('Запрос параметров:', {
           name,
-          pageNumber: (page - 1).toString(),
-          pageSize: pageSize.toString(),
+          pageNumber: pageNumberStr,
+          pageSize: pageSizeStr,
           astronomicalObjectType,
           locationUid,
         });
+
         return {
           url: 'astronomicalObject/search',
           method: name ? 'POST' : 'GET',
           params: name
             ? undefined
             : {
-                pageNumber: (page - 1).toString(),
-                pageSize: pageSize.toString(),
+                pageNumber: pageNumberStr,
+                pageSize: pageSizeStr,
                 ...(astronomicalObjectType && { astronomicalObjectType }),
                 ...(locationUid && { locationUid }),
               },
           body: name
             ? new URLSearchParams({
                 name,
-                pageNumber: (page - 1).toString(),
-                pageSize: pageSize.toString(),
+                pageNumber: pageNumberStr,
+                pageSize: pageSizeStr,
                 ...(astronomicalObjectType && { astronomicalObjectType }),
                 ...(locationUid && { locationUid }),
               })
@@ -59,11 +68,16 @@ export const astronomicalObjectsApi = createApi({
       AstronomicalObjectV2FullResponse,
       string
     >({
-      query: (uid) => ({
-        url: 'astronomicalObject',
-        method: 'GET',
-        params: { uid },
-      }),
+      query: (uid) => {
+        if (!uid) {
+          throw new Error('UID must be defined');
+        }
+        return {
+          url: 'astronomicalObject',
+          method: 'GET',
+          params: { uid },
+        };
+      },
     }),
   }),
 });
@@ -72,3 +86,4 @@ export const {
   useGetAstronomicalObjectsQuery,
   useGetAstronomicalObjectByIdQuery,
 } = astronomicalObjectsApi;
+1;

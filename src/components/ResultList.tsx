@@ -1,11 +1,9 @@
-// components/ResultList.tsx
 import React, { useCallback, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { AstronomicalObjectV2Base } from '../types';
-import { useDispatch, useSelector } from 'react-redux';
-
 import { useGetAstronomicalObjectsQuery } from '../services/astronomicalObjectsApi';
-import { RootState } from '../store/index';
+import { RootState } from '../store';
 import { selectItem, unselectItem } from '../services/astronomicalObjectsSlice';
 import { useTheme } from '../hooks/useTheme';
 
@@ -25,6 +23,7 @@ const ResultList: React.FC<ResultsProps> = ({
   const { data, isLoading, error } = useGetAstronomicalObjectsQuery({
     name: searchTerm,
     page,
+    pageSize: 10,
   });
   const dispatch = useDispatch();
   const selectedItems = useSelector(
@@ -66,7 +65,8 @@ const ResultList: React.FC<ResultsProps> = ({
     (id: string) => {
       const queryParams = new URLSearchParams(window.location.search);
       queryParams.set('details', id);
-      router.push(`/?${queryParams.toString()}`);
+      router.push(`/?${queryParams.toString()}`, undefined, { shallow: true });
+      console.log('Selected item ID:', id);
     },
     [router]
   );
@@ -75,14 +75,22 @@ const ResultList: React.FC<ResultsProps> = ({
     if (event.target === cardContainerRef.current) {
       const queryParams = new URLSearchParams(window.location.search);
       queryParams.delete('details');
-      router.push(`/?${queryParams.toString()}`);
+      router.push(`/?${queryParams.toString()}`, undefined, { shallow: true });
     }
   };
 
   return (
     <div className={`result-list ${theme}`} style={{ width: '100%' }}>
       {isLoading && <div>Loading...</div>}
-      {error && <div>Error: {error.message}</div>}
+      {error && (
+        <div>
+          Error:{' '}
+          {'data' in error
+            ? (error.data as { message?: string }).message ||
+              'An error occurred'
+            : (error as Error).message}
+        </div>
+      )}
       {!isLoading && !error && (
         <>
           {data?.astronomicalObjects.length === 0 ? (
