@@ -137,3 +137,4 @@ const ResultList: React.FC<ResultsProps> = ({
 };
 
 export default ResultList;
+1
