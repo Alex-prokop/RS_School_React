@@ -13,10 +13,20 @@ const usePagination = (initialPage = 1) => {
         10
       );
       const pageNumber = isNaN(pageParam) ? initialPage : pageParam;
+
+      // If there is no page parameter in the URL, set it to initialPage
+      if (!router.query.page) {
+        const queryParams = new URLSearchParams(window.location.search);
+        queryParams.set('page', pageNumber.toString());
+        router.replace(`/?${queryParams.toString()}`, undefined, {
+          shallow: true,
+        });
+      }
+
       setPage(pageNumber);
       isInitialMount.current = false;
     }
-  }, [router.query, initialPage]);
+  }, [router.query, initialPage, router]);
 
   useEffect(() => {
     if (!isInitialMount.current) {

@@ -1,4 +1,3 @@
-// components/Flyout.tsx
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store';
@@ -30,7 +29,7 @@ const Flyout: React.FC<FlyoutProps> = ({ selectedItems, fullDetails }) => {
 
   const handleDownload = async () => {
     setLoading(true);
-    for (const item of selectedItems) {
+    const fetchDetailsPromises = selectedItems.map(async (item) => {
       if (!fullDetails[item.uid]) {
         try {
           const result = await dispatch(fetchFullDetails(item.uid)).unwrap();
@@ -39,8 +38,10 @@ const Flyout: React.FC<FlyoutProps> = ({ selectedItems, fullDetails }) => {
           console.error('Failed to fetch details:', error);
         }
       }
-    }
+    });
+    await Promise.all(fetchDetailsPromises);
     setLoading(false);
+    setDetailsFetched(true);
   };
 
   useEffect(() => {
