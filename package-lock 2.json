@@ -4381,9 +4381,9 @@
       }
     },
     "node_modules/caniuse-lite": {
-      "version": "1.0.30001650",
-      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001650.tgz",
-      "integrity": "sha512-fgEc7hP/LB7iicdXHUI9VsBsMZmUmlVJeQP2qqQW+3lkqVhbmjEU8zp+h5stWeilX+G7uXuIUIIlWlDw9jdt8g==",
+      "version": "1.0.30001649",
+      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001649.tgz",
+      "integrity": "sha512-fJegqZZ0ZX8HOWr6rcafGr72+xcgJKI9oWfDW5DrD7ExUtgZC7a7R7ZYmZqplh7XDocFdGeIFn7roAxhOeYrPQ==",
       "funding": [
         {
           "type": "opencollective",
@@ -6629,9 +6629,9 @@
       }
     },
     "node_modules/foreground-child": {
-      "version": "3.3.0",
-      "resolved": "https://registry.npmjs.org/foreground-child/-/foreground-child-3.3.0.tgz",
-      "integrity": "sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==",
+      "version": "3.2.1",
+      "resolved": "https://registry.npmjs.org/foreground-child/-/foreground-child-3.2.1.tgz",
+      "integrity": "sha512-PXUUyLqrR2XCWICfv6ukppP96sdFwWbNEnfEMt7jNsISjMsvaLNinAHNDYyvkyU+SZG2BTSbT5NjG+vZslfGTA==",
       "dev": true,
       "license": "ISC",
       "dependencies": {
@@ -11578,9 +11578,9 @@
       }
     },
     "node_modules/terser": {
-      "version": "5.31.4",
-      "resolved": "https://registry.npmjs.org/terser/-/terser-5.31.4.tgz",
-      "integrity": "sha512-3OU03GgblDgu0g+sdnsVzhBPxnjV+WJuMmocN1qBBZDQ3ia7jZQSAkePeKbPlYAejGXUTYe1CmSaUeV51mvaIw==",
+      "version": "5.31.3",
+      "resolved": "https://registry.npmjs.org/terser/-/terser-5.31.3.tgz",
+      "integrity": "sha512-pAfYn3NIZLyZpa83ZKigvj6Rn9c/vd5KfYGX7cN1mnzqgDcxWvrU5ZtAfIKhEXz9nRecw4z3LXkjaq96/qZqAA==",
       "dev": true,
       "license": "BSD-2-Clause",
       "peer": true,
@@ -12231,14 +12231,14 @@
       }
     },
     "node_modules/vite": {
-      "version": "5.4.0",
-      "resolved": "https://registry.npmjs.org/vite/-/vite-5.4.0.tgz",
-      "integrity": "sha512-5xokfMX0PIiwCMCMb9ZJcMyh5wbBun0zUzKib+L65vAZ8GY9ePZMXxFrHbr/Kyll2+LSCY7xtERPpxkBDKngwg==",
+      "version": "5.3.5",
+      "resolved": "https://registry.npmjs.org/vite/-/vite-5.3.5.tgz",
+      "integrity": "sha512-MdjglKR6AQXQb9JGiS7Rc2wC6uMjcm7Go/NHNO63EwiJXfuk9PgqiP/n5IDJCziMkfw9n4Ubp7lttNwz+8ZVKA==",
       "dev": true,
       "license": "MIT",
       "dependencies": {
         "esbuild": "^0.21.3",
-        "postcss": "^8.4.40",
+        "postcss": "^8.4.39",
         "rollup": "^4.13.0"
       },
       "bin": {
@@ -12258,7 +12258,6 @@
         "less": "*",
         "lightningcss": "^1.21.0",
         "sass": "*",
-        "sass-embedded": "*",
         "stylus": "*",
         "sugarss": "*",
         "terser": "^5.4.0"
@@ -12274,9 +12273,6 @@
           "optional": true
         },
         "sass": {
-          "optional": true
-        },
-        "sass-embedded": {
           "optional": true
         },
         "stylus": {

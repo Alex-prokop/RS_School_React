@@ -31,7 +31,7 @@ const usePagination = (initialPage = 1) => {
         router.push(`/?${queryParams.toString()}`);
       }
     }
-  }, [page, router, initialPage]); // Добавьте initialPage в зависимости
+  }, [page, router, initialPage]);
 
   return { page, setPage };
 };

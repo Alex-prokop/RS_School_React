@@ -4,6 +4,8 @@ import { astronomicalObjectsApi } from '../services/astronomicalObjectsApi';
 
 export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (context) => {
+    console.log('Fetching data on the server');
+
     const pageQuery = context.query.page || '1';
     const searchTerm = context.query.searchTerm || '';
 

@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
+// components/MainPage.tsx
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import ResultList from './ResultList';
 import usePagination from '../hooks/usePagination';
 import Flyout from './Flyout';
 import Pagination from './Pagination';
 import Details from './Details';
-import {
-  AstronomicalObjectV2BaseResponse,
-  AstronomicalObjectV2Base,
-} from '../types';
+import { RootState } from '../store';
+import { AstronomicalObjectV2BaseResponse } from '../types';
 
 interface MainPageProps {
   initialData: AstronomicalObjectV2BaseResponse;
-  selectedItems: AstronomicalObjectV2Base[];
 }
 
-const MainPage: React.FC<MainPageProps> = ({ initialData, selectedItems }) => {
+const MainPage: React.FC<MainPageProps> = ({ initialData }) => {
   const router = useRouter();
   const { query } = router;
   const detailsId = query.details as string;
@@ -25,13 +24,12 @@ const MainPage: React.FC<MainPageProps> = ({ initialData, selectedItems }) => {
     initialData?.page?.totalPages || 1
   );
 
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      console.log('Server-side rendering');
-    } else {
-      console.log('Client-side rendering');
-    }
-  }, []);
+  const fullDetails = useSelector(
+    (state: RootState) => state.astronomicalObjects.fullDetails
+  );
+  const selectedItems = useSelector(
+    (state: RootState) => state.astronomicalObjects.selectedItems
+  );
 
   return (
     <div className="main-page">
@@ -55,7 +53,7 @@ const MainPage: React.FC<MainPageProps> = ({ initialData, selectedItems }) => {
         totalPages={totalPages}
         onPageChange={setPage}
       />
-      <Flyout selectedItems={selectedItems} />
+      <Flyout selectedItems={selectedItems} fullDetails={fullDetails} />
     </div>
   );
 };
