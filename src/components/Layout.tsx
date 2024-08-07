@@ -1,10 +1,13 @@
-// components/Layout.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, ReactNode } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { useTheme } from '../hooks/useTheme';
 
-const Layout: React.FC = ({ children }) => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { theme } = useTheme();
 
   useEffect(() => {

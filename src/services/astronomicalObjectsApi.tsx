@@ -26,41 +26,28 @@ export const astronomicalObjectsApi = createApi({
         astronomicalObjectType,
         locationUid,
       }) => {
-        const pageNumberStr = (page - 1)?.toString();
-        const pageSizeStr = pageSize?.toString();
-
-        if (!pageNumberStr || !pageSizeStr) {
-          throw new Error('Page and PageSize must be defined');
-        }
-
-        console.log('Запрос параметров:', {
-          name,
-          pageNumber: pageNumberStr,
-          pageSize: pageSizeStr,
-          astronomicalObjectType,
-          locationUid,
+        const params = new URLSearchParams({
+          pageNumber: (page - 1).toString(),
+          pageSize: pageSize.toString(),
+          ...(astronomicalObjectType && { astronomicalObjectType }),
+          ...(locationUid && { locationUid }),
         });
+
+        if (name) {
+          params.append('name', name);
+        }
 
         return {
           url: 'astronomicalObject/search',
           method: name ? 'POST' : 'GET',
-          params: name
-            ? undefined
-            : {
-                pageNumber: pageNumberStr,
-                pageSize: pageSizeStr,
-                ...(astronomicalObjectType && { astronomicalObjectType }),
-                ...(locationUid && { locationUid }),
-              },
-          body: name
-            ? new URLSearchParams({
-                name,
-                pageNumber: pageNumberStr,
-                pageSize: pageSizeStr,
-                ...(astronomicalObjectType && { astronomicalObjectType }),
-                ...(locationUid && { locationUid }),
-              })
-            : undefined,
+          ...(name
+            ? {
+                body: params.toString(),
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+              }
+            : { params }),
         };
       },
     }),
@@ -68,16 +55,11 @@ export const astronomicalObjectsApi = createApi({
       AstronomicalObjectV2FullResponse,
       string
     >({
-      query: (uid) => {
-        if (!uid) {
-          throw new Error('UID must be defined');
-        }
-        return {
-          url: 'astronomicalObject',
-          method: 'GET',
-          params: { uid },
-        };
-      },
+      query: (uid) => ({
+        url: 'astronomicalObject',
+        method: 'GET',
+        params: { uid },
+      }),
     }),
   }),
 });
@@ -86,4 +68,3 @@ export const {
   useGetAstronomicalObjectsQuery,
   useGetAstronomicalObjectByIdQuery,
 } = astronomicalObjectsApi;
-1;

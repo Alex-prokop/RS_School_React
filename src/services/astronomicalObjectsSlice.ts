@@ -16,20 +16,16 @@ const initialState: AstronomicalObjectsState = {
 };
 
 // Async thunk for fetching full details
-export const fetchFullDetails = createAsyncThunk(
-  'astronomicalObjects/fetchFullDetails',
-  async (uid: string) => {
-    const response = await fetch(
-      `https://stapi.co/api/v2/rest/astronomicalObject?uid=${uid}`
-    );
-    const data = await response.json();
-    console.log(`Fetched details for uid: ${uid}`, data);
-    return { uid, data } as {
-      uid: string;
-      data: AstronomicalObjectV2FullResponse;
-    };
-  }
-);
+export const fetchFullDetails = createAsyncThunk<
+  { uid: string; data: AstronomicalObjectV2FullResponse },
+  string
+>('astronomicalObjects/fetchFullDetails', async (uid: string) => {
+  const response = await fetch(
+    `https://stapi.co/api/v2/rest/astronomicalObject?uid=${uid}`
+  );
+  const data: AstronomicalObjectV2FullResponse = await response.json();
+  return { uid, data };
+});
 
 const astronomicalObjectsSlice = createSlice({
   name: 'astronomicalObjects',
@@ -50,9 +46,7 @@ const astronomicalObjectsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchFullDetails.fulfilled, (state, action) => {
       const { uid, data } = action.payload;
-      console.log(`Storing details for uid: ${uid}`, data);
       state.fullDetails[uid] = data;
-      console.log('Updated fullDetails:', JSON.stringify(state.fullDetails));
     });
   },
 });

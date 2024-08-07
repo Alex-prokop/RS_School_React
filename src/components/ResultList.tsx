@@ -1,51 +1,48 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { AstronomicalObjectV2Base } from '../types';
 import { useGetAstronomicalObjectsQuery } from '../services/astronomicalObjectsApi';
 import { RootState } from '../store';
 import { selectItem, unselectItem } from '../services/astronomicalObjectsSlice';
 import { useTheme } from '../hooks/useTheme';
+import { AstronomicalObjectV2BaseResponse } from '../types';
 
 interface ResultsProps {
   searchTerm: string;
   page: number;
-  setPage: (page: number) => void;
   setTotalPages: (totalPages: number) => void;
+  initialData: AstronomicalObjectV2BaseResponse;
 }
 
 const ResultList: React.FC<ResultsProps> = ({
   searchTerm,
   page,
   setTotalPages,
+  initialData,
 }) => {
-  const { theme } = useTheme();
-  const { data, isLoading, error } = useGetAstronomicalObjectsQuery({
-    name: searchTerm,
-    page,
-    pageSize: 10,
-  });
   const dispatch = useDispatch();
+  const { theme } = useTheme();
   const selectedItems = useSelector(
     (state: RootState) => state.astronomicalObjects.selectedItems
   );
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const savedSelectedItems = localStorage.getItem('selectedItems');
-    if (savedSelectedItems) {
-      const parsedItems: AstronomicalObjectV2Base[] =
-        JSON.parse(savedSelectedItems);
-      parsedItems.forEach((item) => {
-        dispatch(selectItem(item));
-      });
+  const {
+    data = initialData,
+    isLoading,
+    error,
+  } = useGetAstronomicalObjectsQuery(
+    {
+      name: searchTerm,
+      page,
+      pageSize: 10,
+    },
+    {
+      skip: !!initialData,
     }
-  }, [dispatch]);
-
-  useEffect(() => {
-    localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
-  }, [selectedItems]);
+  );
 
   useEffect(() => {
     if (data?.page?.totalPages) {
@@ -137,4 +134,3 @@ const ResultList: React.FC<ResultsProps> = ({
 };
 
 export default ResultList;
-1
