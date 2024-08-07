@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div>
+    <div className="App">
       <Header onSearch={handleSearch} throwError={throwError} />
       <main>{children}</main>
       <Footer />

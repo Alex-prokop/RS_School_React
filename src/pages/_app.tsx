@@ -7,6 +7,7 @@ import '../styles/Details.css';
 import '../styles/ResultList.css';
 import '../styles/MainPage.css';
 import '../styles/Pagination.css';
+import '../styles/Layout.css';
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps, router }) => {
   return (
