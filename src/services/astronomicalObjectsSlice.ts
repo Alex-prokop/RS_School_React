@@ -15,7 +15,6 @@ const initialState: AstronomicalObjectsState = {
   fullDetails: {},
 };
 
-// Async thunk for fetching full details
 export const fetchFullDetails = createAsyncThunk<
   { uid: string; data: AstronomicalObjectV2FullResponse },
   string

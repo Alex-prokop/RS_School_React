@@ -1,4 +1,3 @@
-// pages/404.tsx
 import React from 'react';
 import styles from '../styles/NotFound.module.css'; // Подключаем стили
 

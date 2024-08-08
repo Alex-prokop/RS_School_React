@@ -1,14 +1,22 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import MyApp from '../pages/_app'; // Убедитесь, что путь правильный
+import MyApp from '../pages/_app';
 import { AppProps } from 'next/app';
 import { vi } from 'vitest';
 
-// Mock компоненты, которые используются внутри MyApp
-vi.mock('../store/index', () => ({
-  __esModule: true,
-  default: { getState: vi.fn(), subscribe: vi.fn(), dispatch: vi.fn() },
-}));
+vi.mock('../store/index', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    wrapper: {
+      ...actual.wrapper,
+      withRedux:
+        (Component: React.ComponentType<AppProps>) => (props: AppProps) => (
+          <Component {...props} />
+        ),
+    },
+  };
+});
 
 vi.mock('../components/ErrorBoundary', () => ({
   __esModule: true,
@@ -31,7 +39,6 @@ vi.mock('../components/Layout', () => ({
   ),
 }));
 
-// Mock next/router
 vi.mock('next/router', () => ({
   useRouter: () => ({
     route: '/',
@@ -44,9 +51,9 @@ vi.mock('next/router', () => ({
 describe('MyApp', () => {
   it('renders without crashing', () => {
     const Component = () => <div>Test Component</div>;
-    const pageProps = {};
+    const pageProps = {} as AppProps;
 
-    render(<MyApp Component={Component} pageProps={pageProps as AppProps} />);
+    render(<MyApp Component={Component} pageProps={pageProps} />);
 
     expect(screen.getByText('Test Component')).toBeInTheDocument();
   });

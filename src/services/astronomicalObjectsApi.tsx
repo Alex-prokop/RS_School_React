@@ -1,4 +1,3 @@
-// src/services/astronomicalObjectsApi.tsx
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   AstronomicalObjectV2BaseResponse,

@@ -1,85 +1,74 @@
-// Интерфейс для местоположения астрономического объекта. Может содержать вложенные местоположения.
 export interface Location {
-  uid: string; // Уникальный идентификатор местоположения
-  name: string; // Название местоположения
-  astronomicalObjectType?: string; // Тип астрономического объекта
-  location?: Location; // Вложенное местоположение
+  uid: string;
+  name: string;
+  astronomicalObjectType?: string;
+  location?: Location;
 }
 
-// Интерфейс для заголовка астрономического объекта. Используется для краткого описания местоположения.
 export interface AstronomicalObjectHeader {
-  uid: string; // Уникальный идентификатор объекта
-  name: string; // Название объекта
+  uid: string;
+  name: string;
   location?: {
-    name?: string; // Название вложенного местоположения
-    astronomicalObjectType?: string; // Тип вложенного астрономического объекта
+    name?: string;
+    astronomicalObjectType?: string;
     location?: {
-      name?: string; // Название второго уровня вложенного местоположения
+      name?: string;
     };
   };
 }
 
-// Основной интерфейс для базового астрономического объекта.
 export interface AstronomicalObjectV2Base {
-  uid: string; // Уникальный идентификатор объекта
-  name: string; // Название объекта
-  astronomicalObjectType: AstronomicalObjectV2Type; // Тип астрономического объекта
-  location?: AstronomicalObjectHeader; // Заголовок местоположения объекта
+  uid: string;
+  name: string;
+  astronomicalObjectType: AstronomicalObjectV2Type;
+  location?: AstronomicalObjectHeader;
 }
 
-// Интерфейс для полного описания астрономического объекта.
 export interface AstronomicalObjectV2Full {
-  uid: string; // Уникальный идентификатор объекта
-  name: string; // Название объекта
-  astronomicalObjectType: AstronomicalObjectV2Type; // Тип астрономического объекта
-  location?: AstronomicalObjectHeader; // Заголовок местоположения объекта
-  astronomicalObjects?: AstronomicalObjectV2Base[]; // Вложенные астрономические объекты
+  uid: string;
+  name: string;
+  astronomicalObjectType: AstronomicalObjectV2Type;
+  location?: AstronomicalObjectHeader;
+  astronomicalObjects?: AstronomicalObjectV2Base[];
 }
 
-// Интерфейс для сортировки запросов.
 export interface RequestSort {
-  direction: 'ASC' | 'DESC'; // Направление сортировки: восходящее или нисходящее
-  property: string; // Свойство для сортировки
+  direction: 'ASC' | 'DESC';
+  property: string;
 }
 
-// Интерфейс для сортировки ответов.
 export interface ResponseSort {
-  sorted: boolean; // Флаг, указывает, отсортированы ли данные
-  unsorted: boolean; // Флаг, указывает, не отсортированы ли данные
-  empty: boolean; // Флаг, указывает, пустые ли данные
+  sorted: boolean;
+  unsorted: boolean;
+  empty: boolean;
 }
 
-// Интерфейс для информации о странице в ответе.
 export interface ResponsePage {
-  number: number; // Номер текущей страницы
-  size: number; // Размер страницы (количество элементов на странице)
-  totalElements: number; // Общее количество элементов
-  totalPages: number; // Общее количество страниц
+  number: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 }
 
-// Интерфейс для критериев поиска астрономических объектов.
 export interface AstronomicalObjectV2SearchCriteria {
-  pageNumber?: number; // Номер страницы
-  pageSize?: number; // Размер страницы
-  sort?: RequestSort; // Параметры сортировки
-  name?: string; // Название объекта
-  astronomicalObjectType?: AstronomicalObjectV2Type; // Тип астрономического объекта
-  locationUid?: string; // Уникальный идентификатор местоположения
+  pageNumber?: number;
+  pageSize?: number;
+  sort?: RequestSort;
+  name?: string;
+  astronomicalObjectType?: AstronomicalObjectV2Type;
+  locationUid?: string;
 }
 
-// Интерфейс для ответа с базовыми данными о поиске астрономических объектов.
 export interface AstronomicalObjectV2BaseResponse {
-  page: ResponsePage; // Информация о странице
-  sort?: ResponseSort; // Параметры сортировки
-  astronomicalObjects: AstronomicalObjectV2Base[]; // Массив базовых астрономических объектов
+  page: ResponsePage;
+  sort?: ResponseSort;
+  astronomicalObjects: AstronomicalObjectV2Base[];
 }
 
-// Интерфейс для ответа с полными данными об одном астрономическом объекте.
 export interface AstronomicalObjectV2FullResponse {
-  astronomicalObject: AstronomicalObjectV2Full; // Полная информация об астрономическом объекте
+  astronomicalObject: AstronomicalObjectV2Full;
 }
 
-// Тип для астрономического объекта. Определяет возможные типы объектов.
 export type AstronomicalObjectV2Type =
   | 'PLANET'
   | 'D_CLASS_PLANET'

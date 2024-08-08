@@ -16,7 +16,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const handleSearch = (searchTerm: string) => {
     console.log('Search term:', searchTerm);
-    // Логика поиска, если требуется
   };
 
   const throwError = () => {

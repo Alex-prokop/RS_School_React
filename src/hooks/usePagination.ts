@@ -14,7 +14,6 @@ const usePagination = (initialPage = 1) => {
       );
       const pageNumber = isNaN(pageParam) ? initialPage : pageParam;
 
-      // If there is no page parameter in the URL, set it to initialPage
       if (!router.query.page) {
         const queryParams = new URLSearchParams(window.location.search);
         queryParams.set('page', pageNumber.toString());

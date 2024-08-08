@@ -1,14 +1,13 @@
-/* src/components/MainPage.css */
 .main-page {
   display: flex;
   flex-direction: column;
-  flex: 1; /* Убедитесь, что main-page занимает все оставшееся пространство */
+  flex: 1;
   overflow: hidden;
 }
 
 .content-container {
   display: flex;
-  flex: 1; /* Убедитесь, что content-container занимает все оставшееся пространство */
+  flex: 1;
 }
 
 .left-section {

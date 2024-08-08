@@ -1,4 +1,3 @@
-// components/MainPage.tsx
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -32,7 +31,7 @@ const MainPage: React.FC<MainPageProps> = ({ initialData }) => {
   );
 
   return (
-    <div className="main-page">
+    <div className="main-page" role="main">
       <div className="content-container">
         <div className={`left-section ${detailsId ? 'details-visible' : ''}`}>
           <ResultList

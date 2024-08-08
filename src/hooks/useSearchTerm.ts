@@ -1,4 +1,3 @@
-// src/hooks/useSearchTerm.ts
 import { useState, useEffect } from 'react';
 
 const useSearchTerm = (key: string, initialValue: string = '') => {
