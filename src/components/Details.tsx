@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useGetAstronomicalObjectByIdQuery } from '../services/astronomicalObjectsApi';
 
 interface DetailsProps {
@@ -15,7 +17,7 @@ const Details: React.FC<DetailsProps> = ({ id }) => {
   const handleClose = () => {
     const queryParams = new URLSearchParams(window.location.search);
     queryParams.delete('details');
-    router.push(`/?${queryParams.toString()}`, undefined, { shallow: true });
+    router.push(`/?${queryParams.toString()}`);
   };
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import Document from '../pages/_document';
+import Document from '../app/_document';
 import { vi } from 'vitest';
 
 vi.mock('next/document', () => ({

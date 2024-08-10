@@ -1,31 +1,32 @@
+'use client';
+
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const usePagination = (initialPage = 1) => {
   const [page, setPage] = useState(initialPage);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const isInitialMount = useRef(true);
 
   useEffect(() => {
     if (isInitialMount.current) {
       const pageParam = parseInt(
-        (router.query.page as string) || initialPage.toString(),
+        searchParams.get('page') || initialPage.toString(),
         10
       );
       const pageNumber = isNaN(pageParam) ? initialPage : pageParam;
 
-      if (!router.query.page) {
+      if (!searchParams.get('page')) {
         const queryParams = new URLSearchParams(window.location.search);
         queryParams.set('page', pageNumber.toString());
-        router.replace(`/?${queryParams.toString()}`, undefined, {
-          shallow: true,
-        });
+        router.replace(`/?${queryParams.toString()}`);
       }
 
       setPage(pageNumber);
       isInitialMount.current = false;
     }
-  }, [router.query, initialPage, router]);
+  }, [searchParams, initialPage, router]);
 
   useEffect(() => {
     if (!isInitialMount.current) {
