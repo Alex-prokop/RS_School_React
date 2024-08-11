@@ -1,22 +1,58 @@
-import * as React from 'react';
-import { render } from '@testing-library/react';
+// ErrorBoundary.test.tsx
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { describe, it, expect } from 'vitest';
 import ErrorBoundary from '../components/ErrorBoundary';
 
-const ProblemChild = () => {
-  throw new Error('Error thrown from problem child');
-};
+describe('ErrorBoundary Component', () => {
+  it('renders children without error', () => {
+    render(
+      <ErrorBoundary>
+        <div>Child Component</div>
+      </ErrorBoundary>
+    );
 
-test('renders error message when error is thrown', () => {
-  const { getByText } = render(
-    <ErrorBoundary>
-      <ProblemChild />
-    </ErrorBoundary>
-  );
+    expect(screen.getByText('Child Component')).toBeInTheDocument();
+  });
 
-  expect(getByText(/Что-то пошло не так./i)).toBeInTheDocument();
-  expect(
-    getByText(
-      /Пожалуйста, попробуйте перезагрузить страницу или повторите позже./i
-    )
-  ).toBeInTheDocument();
+  it('catches an error and displays the error message', () => {
+    const ThrowError = () => {
+      throw new Error('Test error');
+    };
+
+    render(
+      <ErrorBoundary>
+        <ThrowError />
+      </ErrorBoundary>
+    );
+
+    expect(screen.getByText('Что-то пошло не так.')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Пожалуйста, попробуйте перезагрузить страницу или повторите позже.'
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Error: Test error/)).toBeInTheDocument();
+  });
+
+  it('displays the error details when an error is caught', () => {
+    const ThrowError = () => {
+      throw new Error('Test error');
+    };
+
+    render(
+      <ErrorBoundary>
+        <ThrowError />
+      </ErrorBoundary>
+    );
+
+    expect(screen.getByText('Что-то пошло не так.')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Пожалуйста, попробуйте перезагрузить страницу или повторите позже.'
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Error: Test error/)).toBeInTheDocument();
+  });
 });

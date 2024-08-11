@@ -1,0 +1,8 @@
+.throwErrorButton {
+  background-color: var(--button-background-color);
+  color: var(--text-color);
+}
+
+.throwErrorButton:hover {
+  background-color: var(--button-hover-background-color);
+}

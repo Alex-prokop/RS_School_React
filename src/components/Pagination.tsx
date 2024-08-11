@@ -1,5 +1,6 @@
+// components/Pagination.tsx
 import React from 'react';
-import './Pagination.css';
+import { useRouter } from 'next/router';
 
 interface PaginationProps {
   currentPage: number;
@@ -12,8 +13,11 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
+  const router = useRouter();
+
   const handlePageChange = (page: number) => {
     onPageChange(page);
+    router.push(`/?page=${page}`);
   };
 
   const getPageNumbers = () => {
@@ -36,7 +40,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="pagination">
+    <div className="pagination" role="navigation">
       <button
         onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}

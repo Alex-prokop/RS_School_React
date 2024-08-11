@@ -1,9 +1,8 @@
-// src/components/Header.tsx
 import React from 'react';
 import SearchBar from './SearchBar';
 import ThrowErrorButton from './ThrowErrorButton';
 import ThemeSwitcher from './ThemeSwitcher';
-import styles from './Header.module.css';
+import styles from '../styles/Header.module.css';
 
 interface HeaderProps {
   onSearch: (term: string) => void;

@@ -1,64 +1,54 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import useSearchTerm from '../hooks/useSearchTerm';
 
-describe('useSearchTerm', () => {
-  const key = 'searchTermKey';
+const TestComponent: React.FC<{ initialValue?: string }> = ({
+  initialValue,
+}) => {
+  const [searchTerm, setSearchTerm] = useSearchTerm(
+    'testKey',
+    initialValue || ''
+  );
 
+  return (
+    <div>
+      <input
+        data-testid="search-input"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <p data-testid="search-term">{searchTerm}</p>
+    </div>
+  );
+};
+
+describe('useSearchTerm', () => {
   beforeEach(() => {
     localStorage.clear();
   });
 
-  function TestComponent({
-    hook,
-  }: {
-    hook: () => readonly [string, React.Dispatch<React.SetStateAction<string>>];
-  }) {
-    const [searchTerm, setSearchTerm] = hook();
-    return (
-      <div>
-        <span>{searchTerm}</span>
-        <button onClick={() => setSearchTerm('newValue')}>Change</button>
-      </div>
-    );
-  }
+  it('should return initial value from localStorage if available', () => {
+    localStorage.setItem('testKey', 'initialValue');
 
-  it('should initialize with the value from localStorage', () => {
-    localStorage.setItem(key, 'initialValue');
-    const { getByText } = render(
-      <TestComponent hook={() => useSearchTerm(key)} />
-    );
+    render(<TestComponent />);
 
-    expect(getByText('initialValue')).toBeInTheDocument();
+    expect(screen.getByTestId('search-term').textContent).toBe('initialValue');
   });
 
-  it('should initialize with the provided initialValue if localStorage is empty', () => {
-    const { getByText } = render(
-      <TestComponent hook={() => useSearchTerm(key, 'defaultValue')} />
-    );
+  it('should return default initial value if not in localStorage', () => {
+    render(<TestComponent initialValue="defaultValue" />);
 
-    expect(getByText('defaultValue')).toBeInTheDocument();
+    expect(screen.getByTestId('search-term').textContent).toBe('defaultValue');
   });
 
-  it('should update localStorage when the searchTerm changes', () => {
-    const { getByText } = render(
-      <TestComponent hook={() => useSearchTerm(key)} />
-    );
-    const button = getByText('Change');
+  it('should update localStorage when searchTerm changes', () => {
+    render(<TestComponent initialValue="defaultValue" />);
 
-    fireEvent.click(button);
+    fireEvent.change(screen.getByTestId('search-input'), {
+      target: { value: 'newValue' },
+    });
 
-    expect(localStorage.getItem(key)).toBe('newValue');
-  });
-
-  it('should return the updated searchTerm', () => {
-    const { getByText } = render(
-      <TestComponent hook={() => useSearchTerm(key)} />
-    );
-    const button = getByText('Change');
-
-    fireEvent.click(button);
-
-    expect(getByText('newValue')).toBeInTheDocument();
+    expect(localStorage.getItem('testKey')).toBe('newValue');
+    expect(screen.getByTestId('search-term').textContent).toBe('newValue');
   });
 });

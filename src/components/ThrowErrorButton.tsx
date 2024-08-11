@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from './Button';
-import styles from './ThrowErrorButton.module.css';
+import styles from '../styles/ThrowErrorButton.module.css';
 
 interface ThrowErrorButtonProps {
   throwError: () => void;

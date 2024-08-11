@@ -1,81 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../store';
 import {
   fetchFullDetails,
   unselectItem,
-} from '../features/astronomicalObjectsSlice';
+} from '../services/astronomicalObjectsSlice';
 import Button from './Button';
-import styles from './Flyout.module.css';
+import styles from '../styles/Flyout.module.css';
+import {
+  AstronomicalObjectV2FullResponse,
+  AstronomicalObjectHeader,
+  AstronomicalObjectV2Base,
+} from '../types';
 
-const Flyout: React.FC = () => {
-  const dispatch = useDispatch();
-  const selectedItems = useSelector(
-    (state: RootState) => state.astronomicalObjects.selectedItems
-  );
-  const fullDetails = useSelector(
-    (state: RootState) => state.astronomicalObjects.fullDetails
-  );
+interface FlyoutProps {
+  selectedItems: AstronomicalObjectV2Base[];
+  fullDetails: Record<string, AstronomicalObjectV2FullResponse>;
+}
+
+const Flyout: React.FC<FlyoutProps> = ({ selectedItems, fullDetails }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
   const [detailsFetched, setDetailsFetched] = useState(false);
 
-  // Unselect all selected items
   const handleUnselectAll = () => {
     selectedItems.forEach((item) => dispatch(unselectItem(item.uid)));
   };
 
-  // Effect to check if all details are fetched
-  useEffect(() => {
-    if (loading && selectedItems.length === Object.keys(fullDetails).length) {
-      setDetailsFetched(true);
-      setLoading(false);
-    }
-  }, [fullDetails, loading, selectedItems.length]);
-
-  // Download the CSV file
   const handleDownload = async () => {
     setLoading(true);
-    console.log('Starting download process');
-
-    // Fetch full details for each selected item
-    for (const item of selectedItems) {
+    const fetchDetailsPromises = selectedItems.map(async (item) => {
       if (!fullDetails[item.uid]) {
-        console.log(`Fetching details for uid: ${item.uid}`);
-        await dispatch(fetchFullDetails(item.uid)).unwrap();
+        try {
+          const result = await dispatch(fetchFullDetails(item.uid)).unwrap();
+          console.log('Fetched details:', result);
+        } catch (error) {
+          console.error('Failed to fetch details:', error);
+        }
       }
-    }
+    });
+    await Promise.all(fetchDetailsPromises);
+    setLoading(false);
+    setDetailsFetched(true);
   };
 
-  // Effect to generate CSV once details are fetched
   useEffect(() => {
     if (detailsFetched) {
-      const csvHeaders =
-        'Name,Type,Location Name,Location Type,Parent Location\n';
+      const csvHeaders = 'Name,Type,Location Name,Parent Location\n';
       const csvContent =
         csvHeaders +
         selectedItems
           .map((item) => {
-            const fullDetail = fullDetails[item.uid];
+            const fullDetail = fullDetails[
+              item.uid
+            ] as AstronomicalObjectV2FullResponse;
             if (!fullDetail) {
-              console.log(`No details found for uid: ${item.uid}`);
-              return ''; // In case full detail is not fetched
+              return '';
             }
 
-            const locationName =
-              fullDetail.astronomicalObject.location?.name || '';
-            const locationType =
-              fullDetail.astronomicalObject.location?.astronomicalObjectType ||
-              '';
-            const parentLocationName =
-              fullDetail.astronomicalObject.location?.location?.name || '';
+            const location = fullDetail.astronomicalObject
+              .location as AstronomicalObjectHeader;
+            const locationName = location?.name || '';
+            const parentLocationName = location?.location?.name || '';
 
-            const csvLine = `${fullDetail.astronomicalObject.name},${fullDetail.astronomicalObject.astronomicalObjectType},${locationName},${locationType},${parentLocationName}`;
-            console.log(`CSV line for uid: ${item.uid}`, csvLine);
+            const csvLine = `${fullDetail.astronomicalObject.name},${fullDetail.astronomicalObject.astronomicalObjectType},${locationName},${parentLocationName}`;
             return csvLine;
           })
           .join('\n');
-
-      console.log('CSV content', csvContent);
 
       const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
       const link = document.createElement('a');
@@ -83,9 +74,6 @@ const Flyout: React.FC = () => {
       link.setAttribute('download', `${selectedItems.length}_items.csv`);
       document.body.appendChild(link);
       link.click();
-      console.log('Download process completed');
-
-      // Reset the flag
       setDetailsFetched(false);
     }
   }, [detailsFetched, fullDetails, selectedItems]);

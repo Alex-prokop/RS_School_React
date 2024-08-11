@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import Button from './Button';
-import styles from './SearchBar.module.css';
+import styles from '../styles/SearchBar.module.css';
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;
@@ -9,7 +9,7 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const savedSearchTerm = localStorage.getItem('searchTerm') || '';
@@ -24,7 +24,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     const trimmedSearchTerm = searchTerm.trim();
     localStorage.setItem('searchTerm', trimmedSearchTerm);
     onSearch(trimmedSearchTerm);
-    navigate(`/?searchTerm=${trimmedSearchTerm}&page=1`);
+    router.push(`/?searchTerm=${trimmedSearchTerm}&page=1`);
   };
 
   return (

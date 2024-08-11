@@ -1,0 +1,14 @@
+.notFound {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.notFound h2 {
+  font-size: 3em;
+  color: #ff6f61;
+}
+
+.notFound p {
+  font-size: 1.5em;
+  color: #555;
+}

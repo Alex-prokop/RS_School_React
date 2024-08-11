@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from '../hooks/useTheme';
 import Button from './Button';
-import styles from './ThemeSwitcher.module.css';
+import styles from '../styles/ThemeSwitcher.module.css';
 
 interface ThemeSwitcherProps {
   className?: string;

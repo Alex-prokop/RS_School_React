@@ -1,46 +1,49 @@
-// src/components/MainPage.tsx
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import ResultList from './ResultList';
-import Details from './Details';
-import usePagination from '../components/usePagination';
-import Flyout from '../components/Flyout';
+import usePagination from '../hooks/usePagination';
+import Flyout from './Flyout';
 import Pagination from './Pagination';
-import './MainPage.css';
+import Details from './Details';
+import { RootState } from '../store';
+import { AstronomicalObjectV2BaseResponse } from '../types';
 
 interface MainPageProps {
-  searchTerm: string;
+  initialData: AstronomicalObjectV2BaseResponse;
 }
 
-const MainPage: React.FC<MainPageProps> = ({ searchTerm }) => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const detailsId = queryParams.get('details');
-  const { page, setPage } = usePagination();
-  const [totalPages, setTotalPages] = useState(1);
+const MainPage: React.FC<MainPageProps> = ({ initialData }) => {
+  const router = useRouter();
+  const { query } = router;
+  const detailsId = query.details as string;
 
-  const handleClickLeftSection = () => {
-    queryParams.delete('details');
-    window.history.replaceState(null, '', `/?${queryParams.toString()}`);
-  };
+  const { page, setPage } = usePagination(initialData?.page?.number + 1 || 1);
+  const [totalPages, setTotalPages] = useState(
+    initialData?.page?.totalPages || 1
+  );
+
+  const fullDetails = useSelector(
+    (state: RootState) => state.astronomicalObjects.fullDetails
+  );
+  const selectedItems = useSelector(
+    (state: RootState) => state.astronomicalObjects.selectedItems
+  );
 
   return (
-    <div className="main-page">
+    <div className="main-page" role="main">
       <div className="content-container">
-        <div
-          className={`left-section ${detailsId ? 'details-visible' : ''}`}
-          onClick={handleClickLeftSection}
-        >
+        <div className={`left-section ${detailsId ? 'details-visible' : ''}`}>
           <ResultList
-            searchTerm={searchTerm}
+            searchTerm={(query.searchTerm as string) || ''}
             page={page}
-            setPage={setPage}
             setTotalPages={setTotalPages}
+            initialData={initialData}
           />
         </div>
         {detailsId && (
-          <div className="details-panel">
-            <Details />
+          <div key={detailsId} className="details-panel">
+            <Details id={detailsId} />
           </div>
         )}
       </div>
@@ -49,7 +52,7 @@ const MainPage: React.FC<MainPageProps> = ({ searchTerm }) => {
         totalPages={totalPages}
         onPageChange={setPage}
       />
-      <Flyout />
+      <Flyout selectedItems={selectedItems} fullDetails={fullDetails} />
     </div>
   );
 };

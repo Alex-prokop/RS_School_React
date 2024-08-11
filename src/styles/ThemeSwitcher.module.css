@@ -1,0 +1,8 @@
+.themeSwitcher {
+  background-color: var(--button-background-color);
+  color: var(--text-color);
+}
+
+.themeSwitcher:hover {
+  background-color: var(--button-hover-background-color);
+}

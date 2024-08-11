@@ -1,22 +1,26 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { useGetAstronomicalObjectByIdQuery } from '../services/astronomicalObjectsApi';
-import './Details.css';
 
-const Details: React.FC = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const id = queryParams.get('details');
-  const navigate = useNavigate();
+interface DetailsProps {
+  id: string;
+}
 
-  const { data, isLoading, error } = useGetAstronomicalObjectByIdQuery(
-    id || ''
-  );
+const Details: React.FC<DetailsProps> = ({ id }) => {
+  const router = useRouter();
+  const { data, isLoading, error } = useGetAstronomicalObjectByIdQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const handleClose = () => {
+    const queryParams = new URLSearchParams(window.location.search);
     queryParams.delete('details');
-    navigate(`/?${queryParams.toString()}`);
+    router.push(`/?${queryParams.toString()}`, undefined, { shallow: true });
   };
+
+  useEffect(() => {
+    console.log('Details component rendered with ID:', id);
+  }, [id]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -35,6 +39,8 @@ const Details: React.FC = () => {
   }
 
   const { astronomicalObject } = data;
+
+  console.log('Rendered details for:', astronomicalObject.name);
 
   return (
     <div className="details-card">

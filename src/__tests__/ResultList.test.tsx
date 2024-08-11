@@ -1,67 +1,177 @@
-// import * as React from 'react';
-// import { render, screen, fireEvent } from '@testing-library/react';
-// import { Provider } from 'react-redux';
-// import { BrowserRouter } from 'react-router-dom';
-// import configureMockStore from 'redux-mock-store';
-// import thunk from 'redux-thunk';
-// import ResultList from '../components/ResultList';
-// import { RootState } from '../store';
-// import { AstronomicalObjectV2Base } from '../types';
-// import { selectItem } from '../features/astronomicalObjectsSlice';
-// import { ThemeProvider } from '../contexts/ThemeProvider';
-// import { AnyAction } from 'redux';
+// ResultList.test.tsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ResultList from '../components/ResultList';
+import React from 'react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { useRouter } from 'next/router';
+import { useGetAstronomicalObjectsQuery } from '../services/astronomicalObjectsApi';
+import astronomicalObjectsReducer from '../services/astronomicalObjectsSlice';
 
-// const middlewares = [thunk];
-// const mockStore = configureMockStore<RootState, AnyAction>(middlewares);
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
+}));
 
-// const mockData: AstronomicalObjectV2Base[] = [
-//   { uid: '1', name: 'Earth', astronomicalObjectType: 'PLANET' },
-//   { uid: '2', name: 'Mars', astronomicalObjectType: 'PLANET' },
-// ];
+vi.mock('../services/astronomicalObjectsApi', () => ({
+  useGetAstronomicalObjectsQuery: vi.fn(),
+}));
 
-// const mockInitialState: RootState = {
-//   astronomicalObjects: {
-//     selectedItems: [],
-//     fullDetails: {},
-//   },
-//   astronomicalObjectsApi: {
-//     queries: {},
-//     mutations: {},
-//     provided: {},
-//     subscriptions: {},
-//     config: {
-//       online: true,
-//       reducerPath: 'astronomicalObjectsApi',
-//     },
-//   } as any,
-// };
+const mockStore = configureStore({
+  reducer: {
+    astronomicalObjects: astronomicalObjectsReducer,
+  },
+});
 
-// test('renders ResultList and handles selection', () => {
-//   const store = mockStore(mockInitialState);
-//   store.dispatch = jest.fn();
+const renderWithProviders = (ui: React.ReactElement) => {
+  return render(<Provider store={mockStore}>{ui}</Provider>);
+};
 
-//   render(
-//     <Provider store={store}>
-//       <ThemeProvider>
-//         <BrowserRouter>
-//           <ResultList
-//             searchTerm=""
-//             page={1}
-//             setPage={() => {}}
-//             setTotalPages={() => {}}
-//           />
-//         </BrowserRouter>
-//       </ThemeProvider>
-//     </Provider>
-//   );
+describe('ResultList Component', () => {
+  const routerPushMock = vi.fn();
 
-//   mockData.forEach((item) => {
-//     const element = screen.getByText(item.name);
-//     expect(element).toBeInTheDocument();
-//   });
+  beforeEach(() => {
+    useRouter.mockReturnValue({ push: routerPushMock });
+  });
 
-//   const firstCheckbox = screen.getAllByRole('checkbox')[0];
-//   fireEvent.click(firstCheckbox);
+  it('renders loading state', () => {
+    (useGetAstronomicalObjectsQuery as vi.Mock).mockReturnValue({
+      data: null,
+      isLoading: true,
+      error: null,
+    });
 
-//   expect(store.dispatch).toHaveBeenCalledWith(selectItem(mockData[0]));
-// });
+    renderWithProviders(
+      <ResultList
+        searchTerm=""
+        page={1}
+        setTotalPages={() => {}}
+        initialData={null}
+      />
+    );
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+
+  it('renders error state', () => {
+    (useGetAstronomicalObjectsQuery as vi.Mock).mockReturnValue({
+      data: null,
+      isLoading: false,
+      error: { message: 'An error occurred' },
+    });
+
+    renderWithProviders(
+      <ResultList
+        searchTerm=""
+        page={1}
+        setTotalPages={() => {}}
+        initialData={null}
+      />
+    );
+
+    expect(screen.getByText('Error: An error occurred')).toBeInTheDocument();
+  });
+
+  it('renders no results found state', () => {
+    (useGetAstronomicalObjectsQuery as vi.Mock).mockReturnValue({
+      data: { astronomicalObjects: [] },
+      isLoading: false,
+      error: null,
+    });
+
+    renderWithProviders(
+      <ResultList
+        searchTerm=""
+        page={1}
+        setTotalPages={() => {}}
+        initialData={null}
+      />
+    );
+
+    expect(screen.getByText('No results found')).toBeInTheDocument();
+  });
+
+  it('renders results', () => {
+    (useGetAstronomicalObjectsQuery as vi.Mock).mockReturnValue({
+      data: {
+        astronomicalObjects: [
+          { uid: '1', name: 'Object 1', astronomicalObjectType: 'Type 1' },
+          { uid: '2', name: 'Object 2', astronomicalObjectType: 'Type 2' },
+        ],
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    renderWithProviders(
+      <ResultList
+        searchTerm=""
+        page={1}
+        setTotalPages={() => {}}
+        initialData={null}
+      />
+    );
+
+    expect(screen.getByText('Object 1')).toBeInTheDocument();
+    expect(screen.getByText('Object 2')).toBeInTheDocument();
+  });
+
+  it('handles item selection and unselection', () => {
+    (useGetAstronomicalObjectsQuery as vi.Mock).mockReturnValue({
+      data: {
+        astronomicalObjects: [
+          { uid: '1', name: 'Object 1', astronomicalObjectType: 'Type 1' },
+        ],
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    renderWithProviders(
+      <ResultList
+        searchTerm=""
+        page={1}
+        setTotalPages={() => {}}
+        initialData={null}
+      />
+    );
+
+    const checkbox = screen.getByRole('checkbox');
+    expect(checkbox).not.toBeChecked();
+
+    fireEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
+
+    fireEvent.click(checkbox);
+    expect(checkbox).not.toBeChecked();
+  });
+
+  it('handles item selection with URL update', () => {
+    (useGetAstronomicalObjectsQuery as vi.Mock).mockReturnValue({
+      data: {
+        astronomicalObjects: [
+          { uid: '1', name: 'Object 1', astronomicalObjectType: 'Type 1' },
+        ],
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    renderWithProviders(
+      <ResultList
+        searchTerm=""
+        page={1}
+        setTotalPages={() => {}}
+        initialData={null}
+      />
+    );
+
+    const card = screen.getByText('Object 1');
+    fireEvent.click(card);
+
+    expect(routerPushMock).toHaveBeenCalledWith('/?details=1', undefined, {
+      shallow: true,
+    });
+  });
+});
