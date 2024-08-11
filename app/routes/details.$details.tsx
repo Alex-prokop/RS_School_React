@@ -1,6 +1,6 @@
+// src/app/routes/details.$details.tsx
 import React from 'react';
-
-import Details from '../../components/Details';
+import Details from '../../src/components/Details';
 
 export default function DetailsPage({
   params,

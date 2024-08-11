@@ -1,12 +1,10 @@
-'use client';
-
 import { useState, useEffect, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useNavigate, useSearchParams } from '@remix-run/react';
 
 const usePagination = (initialPage = 1) => {
   const [page, setPage] = useState(initialPage);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const isInitialMount = useRef(true);
 
   useEffect(() => {
@@ -20,13 +18,13 @@ const usePagination = (initialPage = 1) => {
       if (!searchParams.get('page')) {
         const queryParams = new URLSearchParams(window.location.search);
         queryParams.set('page', pageNumber.toString());
-        router.replace(`/?${queryParams.toString()}`);
+        navigate(`/?${queryParams.toString()}`, { replace: true });
       }
 
       setPage(pageNumber);
       isInitialMount.current = false;
     }
-  }, [searchParams, initialPage, router]);
+  }, [searchParams, initialPage, navigate]);
 
   useEffect(() => {
     if (!isInitialMount.current) {
@@ -38,10 +36,10 @@ const usePagination = (initialPage = 1) => {
       const pageNumber = isNaN(currentPage) ? initialPage : currentPage;
       if (pageNumber !== page) {
         queryParams.set('page', page.toString());
-        router.push(`/?${queryParams.toString()}`);
+        navigate(`/?${queryParams.toString()}`);
       }
     }
-  }, [page, router, initialPage]);
+  }, [page, navigate, initialPage]);
 
   return { page, setPage };
 };

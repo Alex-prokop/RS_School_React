@@ -1,9 +1,7 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useSearchParams } from 'next/navigation';
-import ResultList from './ResultList';
+import { useSearchParams } from '@remix-run/react';
+import ResultList from '../components/ResultList';
 import usePagination from '../hooks/usePagination';
 import Flyout from './Flyout';
 import Pagination from './Pagination';
@@ -19,7 +17,7 @@ interface MainPageProps {
 const MainPage: React.FC<MainPageProps> = ({ initialData }) => {
   console.log('Rendering MainPage with initialData:', initialData);
 
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
   const detailsId = searchParams.get('details');
   console.log('Current detailsId:', detailsId);
 

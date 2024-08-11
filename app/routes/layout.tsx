@@ -1,17 +1,15 @@
-'use client';
-
-import '../styles/globals.css';
-import '../styles/Details.css';
-import '../styles/ResultList.css';
-import '../styles/MainPage.css';
-import '../styles/Pagination.css';
+import '../../src/styles/globals.css';
+import '../../src/styles/Details.css';
+import '../../src/styles/ResultList.css';
+import '../../src/styles/MainPage.css';
+import '../../src/styles/Pagination.css';
 
 import React from 'react';
-import { ThemeProvider } from '../contexts/ThemeProvider';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { ThemeProvider } from '../../src/contexts/ThemeProvider';
+import Header from '../../src/components/Header';
+import Footer from '../../src/components/Footer';
 import { Provider } from 'react-redux';
-import store from '../store';
+import store from '../../src/store';
 
 export default function RootLayout({
   children,

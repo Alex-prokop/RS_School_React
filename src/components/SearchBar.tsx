@@ -1,7 +1,5 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@remix-run/react';
 import Button from './Button';
 import styles from '../styles/SearchBar.module.css';
 
@@ -11,7 +9,7 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedSearchTerm = localStorage.getItem('searchTerm') || '';
@@ -26,7 +24,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     const trimmedSearchTerm = searchTerm.trim();
     localStorage.setItem('searchTerm', trimmedSearchTerm);
     onSearch(trimmedSearchTerm);
-    router.push(`/?searchTerm=${trimmedSearchTerm}&page=1`);
+    navigate(`/?searchTerm=${trimmedSearchTerm}&page=1`);
   };
 
   return (

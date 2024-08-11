@@ -1,7 +1,6 @@
-'use client';
-
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@remix-run/react';
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -13,11 +12,11 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handlePageChange = (page: number) => {
     onPageChange(page);
-    router.push(`/?page=${page}`);
+    navigate(`/?page=${page}`);
   };
 
   const getPageNumbers = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import RootLayout from '../app/layout';
+import RootLayout from '../app/routes/layout';
 import { vi } from 'vitest';
 
 vi.mock('../components/Header', () => ({

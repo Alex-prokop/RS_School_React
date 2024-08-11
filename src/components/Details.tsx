@@ -1,7 +1,5 @@
-'use client';
-
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@remix-run/react';
 import { useGetAstronomicalObjectByIdQuery } from '../services/astronomicalObjectsApi';
 
 interface DetailsProps {
@@ -9,7 +7,7 @@ interface DetailsProps {
 }
 
 const Details: React.FC<DetailsProps> = ({ id }) => {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { data, isLoading, error } = useGetAstronomicalObjectByIdQuery(id, {
     refetchOnMountOrArgChange: true,
   });
@@ -17,7 +15,7 @@ const Details: React.FC<DetailsProps> = ({ id }) => {
   const handleClose = () => {
     const queryParams = new URLSearchParams(window.location.search);
     queryParams.delete('details');
-    router.push(`/?${queryParams.toString()}`);
+    navigate(`/?${queryParams.toString()}`);
   };
 
   useEffect(() => {
@@ -79,4 +77,3 @@ const Details: React.FC<DetailsProps> = ({ id }) => {
 };
 
 export default Details;
-1;

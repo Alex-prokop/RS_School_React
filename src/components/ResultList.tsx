@@ -1,8 +1,6 @@
-'use client';
-
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useNavigate, useSearchParams } from '@remix-run/react';
 import { AstronomicalObjectV2Base } from '../types';
 import { useGetAstronomicalObjectsQuery } from '../services/astronomicalObjectsApi';
 import { RootState } from '../store';
@@ -29,8 +27,8 @@ const ResultList: React.FC<ResultsProps> = ({
     (state: RootState) => state.astronomicalObjects.selectedItems
   );
   const cardContainerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const {
     data = initialData,
@@ -71,9 +69,9 @@ const ResultList: React.FC<ResultsProps> = ({
     (id: string) => {
       const queryParams = new URLSearchParams(searchParams.toString());
       queryParams.set('details', id);
-      router.push(`/?${queryParams.toString()}`);
+      navigate(`/?${queryParams.toString()}`);
     },
-    [router, searchParams]
+    [navigate, searchParams]
   );
 
   const handleClickContainer = useCallback(
@@ -81,10 +79,10 @@ const ResultList: React.FC<ResultsProps> = ({
       if (event.target === cardContainerRef.current) {
         const queryParams = new URLSearchParams(searchParams.toString());
         queryParams.delete('details');
-        router.push(`/?${queryParams.toString()}`);
+        navigate(`/?${queryParams.toString()}`);
       }
     },
-    [router, searchParams]
+    [navigate, searchParams]
   );
 
   return (
@@ -135,4 +133,3 @@ const ResultList: React.FC<ResultsProps> = ({
 };
 
 export default ResultList;
-1;

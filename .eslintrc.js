@@ -1,52 +1,33 @@
 module.exports = {
   root: true,
-  env: {
-    browser: true,
-    es2020: true,
-  },
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
-    'plugin:react/recommended',
-    'prettier',
-    'plugin:prettier/recommended',
-    'next/core-web-vitals',
-  ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 2020,
-    sourceType: 'module',
   },
-  plugins: ['react-refresh', 'react', '@typescript-eslint', 'prettier'],
   settings: {
     react: {
       version: 'detect',
     },
   },
+  env: {
+    browser: true,
+    amd: true,
+    node: true,
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
+  plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    '@typescript-eslint/no-explicit-any': 'error',
-    'react/jsx-uses-react': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'react/jsx-uses-vars': 'error',
-    'react/jsx-no-target-blank': 'error',
-    'prettier/prettier': ['error'],
-    '@typescript-eslint/ban-types': [
-      'error',
-      {
-        types: {
-          '{}': false,
-        },
-        extendDefaults: true,
-      },
-    ],
+    'prettier/prettier': 'error',
+    'react/react-in-jsx-scope': 'off', // Не нужен с React 17 и выше
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
   },
 };
