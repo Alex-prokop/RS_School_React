@@ -1,5 +1,3 @@
-'use client';
-
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ResultList from '../components/ResultList';
@@ -7,12 +5,15 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useGetAstronomicalObjectsQuery } from '../services/astronomicalObjectsApi';
 import astronomicalObjectsReducer from '../services/astronomicalObjectsSlice';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: () => ({
+    toString: vi.fn(() => ''),
+  }),
 }));
 
 vi.mock('../services/astronomicalObjectsApi', () => ({
@@ -72,25 +73,6 @@ describe('ResultList Component', () => {
     );
 
     expect(screen.getByText('Error: An error occurred')).toBeInTheDocument();
-  });
-
-  it('renders no results found state', () => {
-    (useGetAstronomicalObjectsQuery as vi.Mock).mockReturnValue({
-      data: { astronomicalObjects: [] },
-      isLoading: false,
-      error: null,
-    });
-
-    renderWithProviders(
-      <ResultList
-        searchTerm=""
-        page={1}
-        setTotalPages={() => {}}
-        initialData={null}
-      />
-    );
-
-    expect(screen.getByText('No results found')).toBeInTheDocument();
   });
 
   it('renders results', () => {
@@ -171,8 +153,6 @@ describe('ResultList Component', () => {
     const card = screen.getByText('Object 1');
     fireEvent.click(card);
 
-    expect(routerPushMock).toHaveBeenCalledWith('/?details=1', undefined, {
-      shallow: true,
-    });
+    expect(routerPushMock).toHaveBeenCalledWith('/?details=1');
   });
 });

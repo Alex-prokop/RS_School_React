@@ -3,9 +3,9 @@ import '@testing-library/jest-dom';
 import SearchBar from '../components/SearchBar';
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 

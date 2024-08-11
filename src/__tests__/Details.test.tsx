@@ -1,13 +1,12 @@
-// Details.test.tsx
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Details from '../components/Details';
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
-import { useRouter } from 'next/router';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { useRouter } from 'next/navigation';
 import { useGetAstronomicalObjectByIdQuery } from '../services/astronomicalObjectsApi';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
@@ -112,8 +111,6 @@ describe('Details Component', () => {
     const closeButton = screen.getByText('✕');
     fireEvent.click(closeButton);
 
-    expect(mockRouterPush).toHaveBeenCalledWith('/?', undefined, {
-      shallow: true,
-    });
+    expect(mockRouterPush).toHaveBeenCalledWith('/?');
   });
 });

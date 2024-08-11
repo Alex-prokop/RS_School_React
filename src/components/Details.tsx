@@ -79,3 +79,4 @@ const Details: React.FC<DetailsProps> = ({ id }) => {
 };
 
 export default Details;
+1;

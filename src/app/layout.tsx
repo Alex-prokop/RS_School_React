@@ -31,9 +31,11 @@ export default function RootLayout({
       <body>
         <Provider store={store}>
           <ThemeProvider>
-            <Header onSearch={handleSearch} throwError={throwError} />
-            <main>{children}</main>
-            <Footer />
+            <div className="App">
+              <Header onSearch={handleSearch} throwError={throwError} />
+              <main>{children}</main>
+              <Footer />
+            </div>
           </ThemeProvider>
         </Provider>
       </body>

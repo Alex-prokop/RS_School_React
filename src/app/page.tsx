@@ -1,3 +1,5 @@
+import React from 'react';
+
 import MainPage from '../components/MainPage';
 
 export default async function HomePage({
@@ -47,3 +49,4 @@ export default async function HomePage({
     return <p>Ошибка загрузки данных</p>;
   }
 }
+1;
