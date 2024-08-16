@@ -10,6 +10,9 @@ import RadioInput from '../components/form/RadioInput';
 import FileInput from '../components/form/FileInput';
 import CountryAutocomplete from '../components/CountryAutocomplete';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
+import { useFileHandler } from '../hooks/useFileHandler';
+import { usePasswordStrength } from '../hooks/usePasswordStrength';
+import '../components/Form.css';
 
 const FormUncontrolled = () => {
   const dispatch = useDispatch();
@@ -26,31 +29,16 @@ const FormUncontrolled = () => {
     confirmPassword: '',
     gender: '',
     terms: false,
-    picture: [], // Здесь мы сохраняем файл как массив
+    picture: [] as File[], // Здесь мы сохраняем файл как массив
     country: '',
   });
 
-  const [passwordStrength, setPasswordStrength] = useState<string>('');
+  const { fileData, handleFileChange } = useFileHandler();
+  const passwordStrength = usePasswordStrength(formData.password);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setFormData((prev) => ({ ...prev, password: value }));
-
-    if (
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-        value
-      )
-    ) {
-      setPasswordStrength('Strong');
-    } else if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/.test(value)) {
-      setPasswordStrength('Medium');
-    } else {
-      setPasswordStrength('Weak');
-    }
-  };
-
+  // Функция для обработки выбора страны
   const handleCountrySelect = (country: string) => {
     setFormData((prev) => ({ ...prev, country }));
   };
@@ -59,7 +47,7 @@ const FormUncontrolled = () => {
     const { name, value, type, checked, files } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : files ? [files[0]] : value, // Модифицированный код
+      [name]: type === 'checkbox' ? checked : files ? [files[0]] : value,
     }));
   };
 
@@ -72,27 +60,18 @@ const FormUncontrolled = () => {
       age: formData.age ? parseInt(formData.age, 10) : null,
     };
 
-    console.log('Form data before validation:', dataToValidate);
-
     try {
       await formSchema.validate(dataToValidate, { abortEarly: false });
 
       setErrors({});
       console.log('Validation passed, submitting form');
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64Picture = reader.result?.toString();
-        console.log('Picture processed:', base64Picture);
-        dispatch(formSubmit({ ...dataToValidate, picture: base64Picture }));
-        navigate('/'); // Перенаправляем на главную страницу после успешной отправки формы
-      };
-
       if (formData.picture.length > 0) {
-        reader.readAsDataURL(formData.picture[0]);
-      } else {
-        reader.onloadend(); // Вызов для завершения без изображения
+        handleFileChange(formData.picture[0]);
       }
+
+      dispatch(formSubmit({ ...dataToValidate, picture: fileData }));
+      navigate('/');
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const newErrors: { [key: string]: string } = {};
@@ -102,7 +81,6 @@ const FormUncontrolled = () => {
           }
         });
         setErrors(newErrors);
-        console.error('Validation errors:', newErrors);
       }
       setIsSubmitting(false);
     }
@@ -145,7 +123,7 @@ const FormUncontrolled = () => {
         name="password"
         type="password"
         value={formData.password}
-        onChange={handlePasswordChange}
+        onChange={handleChange}
         error={errors.password}
       />
       <PasswordStrengthMeter password={formData.password} />

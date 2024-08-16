@@ -11,7 +11,8 @@ import RadioInput from '../components/form/RadioInput';
 import FileInput from '../components/form/FileInput';
 import CountryAutocomplete from '../components/CountryAutocomplete';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
-import '../components/Form.css';
+import { useFileHandler } from '../hooks/useFileHandler';
+import { usePasswordStrength } from '../hooks/usePasswordStrength';
 
 const FormControlled = () => {
   const dispatch = useDispatch();
@@ -31,39 +32,21 @@ const FormControlled = () => {
   });
 
   const passwordValue = watch('password');
-  const [passwordStrength, setPasswordStrength] = useState<string>('');
+  const { fileData, handleFileChange } = useFileHandler();
+  const passwordStrength = usePasswordStrength(passwordValue);
 
-  const handlePasswordChange = (value: string) => {
-    if (
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-        value
-      )
-    ) {
-      setPasswordStrength('Strong');
-    } else if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/.test(value)) {
-      setPasswordStrength('Medium');
-    } else {
-      setPasswordStrength('Weak');
-    }
-    console.log('Password strength:', passwordStrength);
-  };
-
+  // Функция для обработки выбора страны
   const handleCountrySelect = (country: string) => {
-    console.log('Selected country:', country);
     setValue('country', country, { shouldValidate: true });
   };
 
   const onSubmit = (data: any) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64Picture = reader.result?.toString();
-      dispatch(formSubmit({ ...data, picture: base64Picture }));
-      navigate('/');
-    };
-
     if (data.picture && data.picture[0]) {
-      reader.readAsDataURL(data.picture[0]);
+      handleFileChange(data.picture[0]);
     }
+
+    dispatch(formSubmit({ ...data, picture: fileData }));
+    navigate('/');
   };
 
   return (
@@ -124,7 +107,7 @@ const FormControlled = () => {
             {...field}
             onChange={(e) => {
               field.onChange(e);
-              handlePasswordChange(e.target.value);
+              // Логика определения силы пароля теперь в хуке usePasswordStrength
             }}
             error={errors.password?.message}
           />
