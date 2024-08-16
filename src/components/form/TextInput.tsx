@@ -1,15 +1,5 @@
 import React from 'react';
 
-interface TextInputProps {
-  label: string;
-  id: string;
-  name: string;
-  type?: string;
-  error?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  defaultValue?: string;
-}
-
 const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
   ({ label, id, name, type = 'text', error, onChange, defaultValue }, ref) => (
     <div>
@@ -31,5 +21,7 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
     </div>
   )
 );
+
+TextInput.displayName = 'TextInput';
 
 export default TextInput;

@@ -1,5 +1,4 @@
 import React from 'react';
-
 interface SelectInputProps {
   label: string;
   id: string;
@@ -8,7 +7,7 @@ interface SelectInputProps {
   error?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
   defaultValue?: string;
-  register?: any;
+  register?: unknown;
 }
 
 const SelectInput: React.FC<SelectInputProps> = ({
@@ -28,8 +27,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
       name={name}
       list={`${id}-list`}
       ref={inputRef}
-      defaultValue={defaultValue} // Добавляем defaultValue для неконтролируемой формы
-      {...(register ? register(name) : {})}
+      defaultValue={defaultValue}
+      {...(register ? register(name) : {})} // Уточняем типизацию
     />
     <datalist id={`${id}-list`}>
       {options.map((option, index) => (
@@ -43,5 +42,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     )}
   </div>
 );
+
+SelectInput.displayName = 'SelectInput'; // Можно указать displayName для унификации
 
 export default SelectInput;

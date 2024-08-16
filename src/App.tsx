@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Main from './routes/Main';
-import FormUncontrolled from './routes/FormUncontrolled';
-import FormControlled from './routes/FormControlled';
+import FormUncontrolledContainer from './routes/FormUncontrolledContainer'; // Импортируйте контейнерный компонент
+import FormControlledContainer from './routes/FormControlledContainer'; // Импортируйте контейнерный компонент
 
 function App() {
   return (
@@ -39,8 +39,12 @@ function App() {
       </nav>
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/form-uncontrolled" element={<FormUncontrolled />} />
-        <Route path="/form-controlled" element={<FormControlled />} />
+        <Route
+          path="/form-uncontrolled"
+          element={<FormUncontrolledContainer />}
+        />{' '}
+        {/* Используем контейнер */}
+        <Route path="/form-controlled" element={<FormControlledContainer />} />
       </Routes>
     </Router>
   );
