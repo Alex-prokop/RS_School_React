@@ -12,7 +12,7 @@ import FileInput from '../components/form/FileInput';
 import CountryAutocomplete from '../components/CountryAutocomplete';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import { useFileHandler } from '../hooks/useFileHandler';
-import { usePasswordStrength } from '../hooks/usePasswordStrength';
+import '../components/Form.css';
 
 const FormControlled = () => {
   const dispatch = useDispatch();
@@ -33,19 +33,20 @@ const FormControlled = () => {
 
   const passwordValue = watch('password');
   const { fileData, handleFileChange } = useFileHandler();
-  const passwordStrength = usePasswordStrength(passwordValue);
 
-  // Функция для обработки выбора страны
   const handleCountrySelect = (country: string) => {
     setValue('country', country, { shouldValidate: true });
   };
+  const onSubmit = async (data: any) => {
+    let pictureData = null;
 
-  const onSubmit = (data: any) => {
     if (data.picture && data.picture[0]) {
-      handleFileChange(data.picture[0]);
+      console.log('File before processing:', data.picture[0]);
+      pictureData = await handleFileChange(data.picture[0]);
+      console.log('Processed file data:', pictureData);
     }
 
-    dispatch(formSubmit({ ...data, picture: fileData }));
+    dispatch(formSubmit({ ...data, picture: pictureData }));
     navigate('/');
   };
 
@@ -105,10 +106,6 @@ const FormControlled = () => {
             name="password"
             type="password"
             {...field}
-            onChange={(e) => {
-              field.onChange(e);
-              // Логика определения силы пароля теперь в хуке usePasswordStrength
-            }}
             error={errors.password?.message}
           />
         )}

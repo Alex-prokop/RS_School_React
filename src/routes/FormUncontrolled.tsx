@@ -10,8 +10,8 @@ import RadioInput from '../components/form/RadioInput';
 import FileInput from '../components/form/FileInput';
 import CountryAutocomplete from '../components/CountryAutocomplete';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
-import { useFileHandler } from '../hooks/useFileHandler';
 import { usePasswordStrength } from '../hooks/usePasswordStrength';
+import { useFileHandler } from '../hooks/useFileHandler';
 import '../components/Form.css';
 
 const FormUncontrolled = () => {
@@ -33,12 +33,11 @@ const FormUncontrolled = () => {
     country: '',
   });
 
-  const { fileData, handleFileChange } = useFileHandler();
   const passwordStrength = usePasswordStrength(formData.password);
+  const { fileData, handleFileChange } = useFileHandler();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Функция для обработки выбора страны
   const handleCountrySelect = (country: string) => {
     setFormData((prev) => ({ ...prev, country }));
   };
@@ -66,12 +65,14 @@ const FormUncontrolled = () => {
       setErrors({});
       console.log('Validation passed, submitting form');
 
+      let pictureData = null;
       if (formData.picture.length > 0) {
-        handleFileChange(formData.picture[0]);
+        pictureData = await handleFileChange(formData.picture[0]);
+        console.log('Processed file data:', pictureData);
       }
 
-      dispatch(formSubmit({ ...dataToValidate, picture: fileData }));
-      navigate('/');
+      dispatch(formSubmit({ ...dataToValidate, picture: pictureData }));
+      navigate('/'); // Перенаправляем на главную страницу после успешной отправки формы
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const newErrors: { [key: string]: string } = {};
