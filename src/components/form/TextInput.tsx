@@ -7,14 +7,27 @@ interface TextInputProps {
   type?: string;
   error?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  defaultValue?: string;
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
-  ({ label, id, name, type = 'text', error, onChange }, ref) => (
+  ({ label, id, name, type = 'text', error, onChange, defaultValue }, ref) => (
     <div>
       <label htmlFor={id}>{label}</label>
-      <input id={id} name={name} type={type} ref={ref} onChange={onChange} />
-      {error && <div className="error">{error}</div>}
+      <input
+        id={id}
+        name={name}
+        type={type}
+        ref={ref}
+        onChange={onChange}
+        defaultValue={defaultValue}
+        aria-invalid={!!error}
+      />
+      {error && (
+        <div className="error" style={{ color: 'red' }}>
+          {error}
+        </div>
+      )}
     </div>
   )
 );

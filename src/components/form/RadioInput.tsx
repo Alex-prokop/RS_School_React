@@ -19,11 +19,15 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>(
         type="radio"
         value={value}
         ref={ref}
-        checked={checked}
+        defaultChecked={checked}
         onChange={onChange}
       />
       <label htmlFor={id}>{label}</label>
-      {error && <div className="error">{error}</div>}
+      {error && (
+        <div className="error" style={{ color: 'red' }}>
+          {error}
+        </div>
+      )}
     </div>
   )
 );

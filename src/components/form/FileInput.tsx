@@ -13,7 +13,11 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
     <div>
       <label htmlFor={id}>{label}</label>
       <input id={id} name={name} type="file" ref={ref} onChange={onChange} />
-      {error && <div className="error">{error}</div>}
+      {error && (
+        <div className="error" style={{ color: 'red' }}>
+          {error}
+        </div>
+      )}
     </div>
   )
 );

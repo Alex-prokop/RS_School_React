@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
@@ -18,22 +18,26 @@ const FormUncontrolled = () => {
     (state: RootState) => state.countries.countries
   );
 
-  const nameRef = useRef<HTMLInputElement>(null);
-  const ageRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement>(null);
-  const genderRef = useRef<HTMLInputElement>(null);
-  const termsRef = useRef<HTMLInputElement>(null);
-  const pictureRef = useRef<HTMLInputElement>(null);
-  const countryRef = useRef<string | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    age: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    gender: '',
+    terms: false,
+    picture: [], // Здесь мы сохраняем файл как массив
+    country: '',
+  });
 
   const [passwordStrength, setPasswordStrength] = useState<string>('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handlePasswordChange = () => {
-    const value = passwordRef.current?.value || '';
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, password: value }));
+
     if (
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
         value
@@ -48,29 +52,30 @@ const FormUncontrolled = () => {
   };
 
   const handleCountrySelect = (country: string) => {
-    countryRef.current = country;
+    setFormData((prev) => ({ ...prev, country }));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : files ? [files[0]] : value, // Модифицированный код
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const formData = {
-      name: nameRef.current?.value,
-      age: ageRef.current?.value,
-      email: emailRef.current?.value,
-      password: passwordRef.current?.value,
-      confirmPassword: confirmPasswordRef.current?.value,
-      gender: genderRef.current?.value,
-      terms: termsRef.current?.checked,
-      picture: pictureRef.current?.files?.[0],
-      country: countryRef.current,
+    const dataToValidate = {
+      ...formData,
+      age: formData.age ? parseInt(formData.age, 10) : null,
     };
 
-    console.log('Form data before validation:', formData);
+    console.log('Form data before validation:', dataToValidate);
 
     try {
-      await formSchema.validate(formData, { abortEarly: false });
+      await formSchema.validate(dataToValidate, { abortEarly: false });
 
       setErrors({});
       console.log('Validation passed, submitting form');
@@ -79,14 +84,14 @@ const FormUncontrolled = () => {
       reader.onloadend = () => {
         const base64Picture = reader.result?.toString();
         console.log('Picture processed:', base64Picture);
-        dispatch(formSubmit({ ...formData, picture: base64Picture }));
-        navigate('/');
+        dispatch(formSubmit({ ...dataToValidate, picture: base64Picture }));
+        navigate('/'); // Перенаправляем на главную страницу после успешной отправки формы
       };
 
-      if (formData.picture) {
-        reader.readAsDataURL(formData.picture);
+      if (formData.picture.length > 0) {
+        reader.readAsDataURL(formData.picture[0]);
       } else {
-        reader.onloadend();
+        reader.onloadend(); // Вызов для завершения без изображения
       }
     } catch (err) {
       if (err instanceof yup.ValidationError) {
@@ -109,7 +114,8 @@ const FormUncontrolled = () => {
         label="Name"
         id="name"
         name="name"
-        inputRef={nameRef}
+        value={formData.name}
+        onChange={handleChange}
         error={errors.name}
       />
 
@@ -118,7 +124,8 @@ const FormUncontrolled = () => {
         id="age"
         name="age"
         type="number"
-        inputRef={ageRef}
+        value={formData.age}
+        onChange={handleChange}
         error={errors.age}
       />
 
@@ -127,7 +134,8 @@ const FormUncontrolled = () => {
         id="email"
         name="email"
         type="email"
-        inputRef={emailRef}
+        value={formData.email}
+        onChange={handleChange}
         error={errors.email}
       />
 
@@ -136,23 +144,21 @@ const FormUncontrolled = () => {
         id="password"
         name="password"
         type="password"
-        inputRef={passwordRef}
+        value={formData.password}
         onChange={handlePasswordChange}
         error={errors.password}
       />
-      <PasswordStrengthMeter password={passwordRef.current?.value || ''} />
+      <PasswordStrengthMeter password={formData.password} />
 
       <TextInput
         label="Confirm Password"
         id="confirmPassword"
         name="confirmPassword"
         type="password"
-        inputRef={confirmPasswordRef}
+        value={formData.confirmPassword}
+        onChange={handleChange}
         error={errors.confirmPassword}
       />
-      {errors.confirmPassword && (
-        <div className="error">{errors.confirmPassword}</div>
-      )}
 
       <div>
         <label>Gender</label>
@@ -161,7 +167,8 @@ const FormUncontrolled = () => {
           id="male"
           name="gender"
           value="Male"
-          inputRef={genderRef}
+          checked={formData.gender === 'Male'}
+          onChange={handleChange}
           error={errors.gender}
         />
         <RadioInput
@@ -169,7 +176,8 @@ const FormUncontrolled = () => {
           id="female"
           name="gender"
           value="Female"
-          inputRef={genderRef}
+          checked={formData.gender === 'Female'}
+          onChange={handleChange}
           error={errors.gender}
         />
       </div>
@@ -179,7 +187,8 @@ const FormUncontrolled = () => {
         id="terms"
         name="terms"
         type="checkbox"
-        inputRef={termsRef}
+        checked={formData.terms}
+        onChange={handleChange}
         error={errors.terms}
       />
 
@@ -187,7 +196,7 @@ const FormUncontrolled = () => {
         label="Upload Picture"
         id="picture"
         name="picture"
-        inputRef={pictureRef}
+        onChange={handleChange}
         error={errors.picture}
       />
 

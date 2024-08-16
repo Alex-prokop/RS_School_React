@@ -7,6 +7,7 @@ interface SelectInputProps {
   options: string[];
   error?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
+  defaultValue?: string;
   register?: any;
 }
 
@@ -17,6 +18,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
   options,
   error,
   inputRef,
+  defaultValue,
   register,
 }) => (
   <div>
@@ -26,6 +28,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
       name={name}
       list={`${id}-list`}
       ref={inputRef}
+      defaultValue={defaultValue} // Добавляем defaultValue для неконтролируемой формы
       {...(register ? register(name) : {})}
     />
     <datalist id={`${id}-list`}>
@@ -33,7 +36,11 @@ const SelectInput: React.FC<SelectInputProps> = ({
         <option key={index} value={option} />
       ))}
     </datalist>
-    {error && <div className="error">{error}</div>}
+    {error && (
+      <div className="error" style={{ color: 'red' }}>
+        {error}
+      </div>
+    )}
   </div>
 );
 
