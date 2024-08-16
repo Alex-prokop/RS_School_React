@@ -24,12 +24,12 @@ const FormUncontrolledContainer = () => {
     confirmPassword: '',
     gender: '',
     terms: false,
-    picture: [] as File[], // Здесь мы сохраняем файл как массив
+    picture: [] as File[],
     country: '',
   });
 
   const passwordStrength = usePasswordStrength(formData.password);
-  const { fileData, handleFileChange } = useFileHandler();
+  const { handleFileChange } = useFileHandler(); 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -66,8 +66,9 @@ const FormUncontrolledContainer = () => {
         console.log('Processed file data:', pictureData);
       }
 
-      dispatch(formSubmit({ ...dataToValidate, picture: pictureData }));
-      navigate('/'); // Перенаправляем на главную страницу после успешной отправки формы
+      await dispatch(formSubmit({ ...dataToValidate, picture: pictureData }));
+
+      navigate('/');
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const newErrors: { [key: string]: string } = {};

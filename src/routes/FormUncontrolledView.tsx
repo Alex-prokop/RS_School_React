@@ -9,7 +9,6 @@ const FormUncontrolledView = ({
   formData,
   errors,
   isSubmitting,
-  passwordStrength,
   handleChange,
   handleSubmit,
   handleCountrySelect,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -27,13 +27,13 @@ const FormControlledContainer = () => {
   });
 
   const passwordValue = watch('password');
-  const { fileData, handleFileChange } = useFileHandler();
+  const { handleFileChange } = useFileHandler();
 
   const handleCountrySelect = (country: string) => {
     setValue('country', country, { shouldValidate: true });
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: unknown) => {
     let pictureData = null;
 
     if (data.picture && data.picture[0]) {

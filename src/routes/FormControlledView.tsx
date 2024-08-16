@@ -10,7 +10,6 @@ const FormControlledView = ({
   control,
   handleSubmit,
   onSubmit,
-  setValue,
   errors,
   isSubmitting,
   handleCountrySelect,
@@ -161,7 +160,13 @@ const FormControlledView = ({
         render={({ field }) => (
           <div>
             <label htmlFor="country">Country</label>
-            <CountryAutocomplete onSelectCountry={handleCountrySelect} />
+            <CountryAutocomplete
+              value={field.value} // Передаем значение из field в компонент
+              onSelectCountry={(value) => {
+                field.onChange(value); // Устанавливаем значение при выборе страны
+                handleCountrySelect(value);
+              }}
+            />
             {errors.country && (
               <div className="error">{errors.country.message}</div>
             )}
