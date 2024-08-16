@@ -10,13 +10,30 @@ function App() {
       <nav>
         <ul>
           <li>
-            <Link to="/">Main</Link>
+            <Link
+              to="/"
+              onClick={() => console.log('Navigating to Main route')}
+            >
+              Main
+            </Link>
           </li>
           <li>
-            <Link to="/form-uncontrolled">Uncontrolled Form</Link>
+            <Link
+              to="/form-uncontrolled"
+              onClick={() =>
+                console.log('Navigating to Uncontrolled Form route')
+              }
+            >
+              Uncontrolled Form
+            </Link>
           </li>
           <li>
-            <Link to="/form-controlled">Controlled Form</Link>
+            <Link
+              to="/form-controlled"
+              onClick={() => console.log('Navigating to Controlled Form route')}
+            >
+              Controlled Form
+            </Link>
           </li>
         </ul>
       </nav>

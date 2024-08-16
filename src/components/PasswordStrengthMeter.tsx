@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PasswordStrengthMeter = ({ password }: { password: string }) => {
+const PasswordStrengthMeter = ({ password = '' }: { password: string }) => {
   const calculateStrength = (password: string) => {
     let strength = 0;
     if (password.length >= 8) strength += 1;

@@ -1,10 +1,19 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { RootState } from './store';
+import { formSchema } from '../components/validationSchema';
+import { RootState } from '../store/store';
+import { formSubmit } from '../store/formSlice';
+import TextInput from '../components/form/TextInput';
+import RadioInput from '../components/form/RadioInput';
+import FileInput from '../components/form/FileInput';
+import CountryAutocomplete from '../components/CountryAutocomplete';
+import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 
-const FormUncontrolled: React.FC = () => {
+const FormUncontrolled = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const countries = useSelector(
     (state: RootState) => state.countries.countries
   );
@@ -17,9 +26,11 @@ const FormUncontrolled: React.FC = () => {
   const genderRef = useRef<HTMLInputElement>(null);
   const termsRef = useRef<HTMLInputElement>(null);
   const pictureRef = useRef<HTMLInputElement>(null);
-  const countryRef = useRef<HTMLInputElement>(null);
+  const countryRef = useRef<string | null>(null);
 
   const [passwordStrength, setPasswordStrength] = useState<string>('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handlePasswordChange = () => {
     const value = passwordRef.current?.value || '';
@@ -36,51 +47,13 @@ const FormUncontrolled: React.FC = () => {
     }
   };
 
+  const handleCountrySelect = (country: string) => {
+    countryRef.current = country;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const schema = yup.object().shape({
-      name: yup
-        .string()
-        .required('Name is required')
-        .matches(/^[A-Z]/, 'Name must start with an uppercase letter'),
-      age: yup
-        .number()
-        .required('Age is required')
-        .positive('Age must be a positive number'),
-      email: yup
-        .string()
-        .required('Email is required')
-        .email('Invalid email format'),
-      password: yup
-        .string()
-        .required('Password is required')
-        .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-          'Password must be stronger'
-        ),
-      confirmPassword: yup
-        .string()
-        .oneOf([yup.ref('password')], 'Passwords must match'),
-      gender: yup.string().required('Gender is required'),
-      terms: yup
-        .boolean()
-        .oneOf([true], 'You must accept the terms and conditions'),
-      picture: yup
-        .mixed()
-        .required('Picture is required')
-        .test(
-          'fileSize',
-          'File too large',
-          (value) => value && value.size <= 1024 * 1024
-        )
-        .test(
-          'fileFormat',
-          'Unsupported Format',
-          (value) => value && ['image/jpeg', 'image/png'].includes(value.type)
-        ),
-      country: yup.string().required('Country is required'),
-    });
+    setIsSubmitting(true);
 
     const formData = {
       name: nameRef.current?.value,
@@ -91,112 +64,145 @@ const FormUncontrolled: React.FC = () => {
       gender: genderRef.current?.value,
       terms: termsRef.current?.checked,
       picture: pictureRef.current?.files?.[0],
-      country: countryRef.current?.value,
+      country: countryRef.current,
     };
 
+    console.log('Form data before validation:', formData);
+
     try {
-      await schema.validate(formData, { abortEarly: false });
+      await formSchema.validate(formData, { abortEarly: false });
+
+      setErrors({});
+      console.log('Validation passed, submitting form');
 
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64Picture = reader.result?.toString();
-        dispatch({
-          type: 'FORM_SUBMIT',
-          payload: { ...formData, picture: base64Picture },
-        });
-        // Редирект на главную страницу после успешной отправки
+        console.log('Picture processed:', base64Picture);
+        dispatch(formSubmit({ ...formData, picture: base64Picture }));
+        navigate('/');
       };
-      if (formData.picture) reader.readAsDataURL(formData.picture);
+
+      if (formData.picture) {
+        reader.readAsDataURL(formData.picture);
+      } else {
+        reader.onloadend();
+      }
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        // Обработка ошибок валидации
+        const newErrors: { [key: string]: string } = {};
         err.inner.forEach((error) => {
-          console.error(error.path, error.message);
+          if (error.path) {
+            newErrors[error.path] = error.message;
+          }
         });
+        setErrors(newErrors);
+        console.error('Validation errors:', newErrors);
       }
+      setIsSubmitting(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input id="name" name="name" ref={nameRef} />
-      </div>
-      <div>
-        <label htmlFor="age">Age</label>
-        <input id="age" name="age" type="number" ref={ageRef} />
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" ref={emailRef} />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          ref={passwordRef}
-          onChange={handlePasswordChange}
-        />
-        <span>Password Strength: {passwordStrength}</span>
-      </div>
-      <div>
-        <label htmlFor="confirmPassword">Confirm Password</label>
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          ref={confirmPasswordRef}
-        />
-      </div>
+      <TextInput
+        label="Name"
+        id="name"
+        name="name"
+        inputRef={nameRef}
+        error={errors.name}
+      />
+
+      <TextInput
+        label="Age"
+        id="age"
+        name="age"
+        type="number"
+        inputRef={ageRef}
+        error={errors.age}
+      />
+
+      <TextInput
+        label="Email"
+        id="email"
+        name="email"
+        type="email"
+        inputRef={emailRef}
+        error={errors.email}
+      />
+
+      <TextInput
+        label="Password"
+        id="password"
+        name="password"
+        type="password"
+        inputRef={passwordRef}
+        onChange={handlePasswordChange}
+        error={errors.password}
+      />
+      <PasswordStrengthMeter password={passwordRef.current?.value || ''} />
+
+      <TextInput
+        label="Confirm Password"
+        id="confirmPassword"
+        name="confirmPassword"
+        type="password"
+        inputRef={confirmPasswordRef}
+        error={errors.confirmPassword}
+      />
+      {errors.confirmPassword && (
+        <div className="error">{errors.confirmPassword}</div>
+      )}
+
       <div>
         <label>Gender</label>
-        <div>
-          <input
-            id="male"
-            name="gender"
-            type="radio"
-            value="Male"
-            ref={genderRef}
-          />
-          <label htmlFor="male">Male</label>
-        </div>
-        <div>
-          <input
-            id="female"
-            name="gender"
-            type="radio"
-            value="Female"
-            ref={genderRef}
-          />
-          <label htmlFor="female">Female</label>
-        </div>
+        <RadioInput
+          label="Male"
+          id="male"
+          name="gender"
+          value="Male"
+          inputRef={genderRef}
+          error={errors.gender}
+        />
+        <RadioInput
+          label="Female"
+          id="female"
+          name="gender"
+          value="Female"
+          inputRef={genderRef}
+          error={errors.gender}
+        />
       </div>
-      <div>
-        <label htmlFor="terms">Accept Terms and Conditions</label>
-        <input id="terms" name="terms" type="checkbox" ref={termsRef} />
-      </div>
-      <div>
-        <label htmlFor="picture">Upload Picture</label>
-        <input id="picture" name="picture" type="file" ref={pictureRef} />
-      </div>
+
+      <TextInput
+        label="Accept Terms and Conditions"
+        id="terms"
+        name="terms"
+        type="checkbox"
+        inputRef={termsRef}
+        error={errors.terms}
+      />
+
+      <FileInput
+        label="Upload Picture"
+        id="picture"
+        name="picture"
+        inputRef={pictureRef}
+        error={errors.picture}
+      />
+
       <div>
         <label htmlFor="country">Country</label>
-        <input
-          id="country"
-          name="country"
-          list="countries-list"
-          ref={countryRef}
-        />
-        <datalist id="countries-list">
-          {countries.map((country, index) => (
-            <option key={index} value={country} />
-          ))}
-        </datalist>
+        <CountryAutocomplete onSelectCountry={handleCountrySelect} />
+        {errors.country && <div className="error">{errors.country}</div>}
       </div>
-      <button type="submit">Submit</button>
+
+      <button
+        type="submit"
+        disabled={isSubmitting || Object.keys(errors).length > 0}
+      >
+        Submit
+      </button>
     </form>
   );
 };
