@@ -12,7 +12,6 @@ const FormControlledView = ({
   onSubmit,
   errors,
   isSubmitting,
-  handleCountrySelect,
   passwordValue,
 }) => {
   return (
@@ -96,7 +95,7 @@ const FormControlledView = ({
       )}
 
       <div>
-        <label>Gender</label>
+        <label htmlFor="gender">Gender</label>
         <Controller
           name="gender"
           control={control}
@@ -161,10 +160,9 @@ const FormControlledView = ({
           <div>
             <label htmlFor="country">Country</label>
             <CountryAutocomplete
-              value={field.value} // Передаем значение из field в компонент
+              value={field.value || ''} 
               onSelectCountry={(value) => {
-                field.onChange(value); // Устанавливаем значение при выборе страны
-                handleCountrySelect(value);
+                field.onChange(value); 
               }}
             />
             {errors.country && (

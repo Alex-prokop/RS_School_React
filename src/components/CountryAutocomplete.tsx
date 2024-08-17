@@ -3,14 +3,16 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 
 const CountryAutocomplete = ({
+  value,
   onSelectCountry,
 }: {
+  value: string;
   onSelectCountry: (country: string) => void;
 }) => {
   const countries = useSelector(
     (state: RootState) => state.countries.countries
   );
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(value || '');
   const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,12 +23,13 @@ const CountryAutocomplete = ({
         country.toLowerCase().includes(value.toLowerCase())
       )
     );
+    onSelectCountry(value); // Обновляем значение country в форме при каждом изменении ввода
   };
 
   const handleSelect = (country: string) => {
     setInputValue(country);
     setFilteredCountries([]);
-    onSelectCountry(country);
+    onSelectCountry(country); // Обновляем значение country в форме при выборе из списка
   };
 
   return (
