@@ -5,6 +5,7 @@ import RadioInput from '../components/form/RadioInput';
 import FileInput from '../components/form/FileInput';
 import CountryAutocomplete from '../components/CountryAutocomplete';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
+import '../components/Form.css';
 
 const FormControlledView = ({
   control,
@@ -160,9 +161,9 @@ const FormControlledView = ({
           <div>
             <label htmlFor="country">Country</label>
             <CountryAutocomplete
-              value={field.value || ''} 
+              value={field.value || ''}
               onSelectCountry={(value) => {
-                field.onChange(value); 
+                field.onChange(value);
               }}
             />
             {errors.country && (
