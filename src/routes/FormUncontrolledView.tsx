@@ -8,13 +8,15 @@ import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 const FormUncontrolledView = ({
   formData,
   errors,
-  isSubmitting,
   handleChange,
   handleSubmit,
   handleCountrySelect,
+  isSubmitDisabled,
 }) => {
   return (
     <form onSubmit={handleSubmit}>
+      <h2 className="header">FormUncontrolled</h2>
+
       <TextInput
         label="Name"
         id="name"
@@ -65,7 +67,7 @@ const FormUncontrolledView = ({
         error={errors.confirmPassword}
       />
 
-      <div>
+      <div className="radio-group">
         <label>Gender</label>
         <RadioInput
           label="Male"
@@ -111,10 +113,7 @@ const FormUncontrolledView = ({
         {errors.country && <div className="error">{errors.country}</div>}
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting || Object.keys(errors).length > 0}
-      >
+      <button type="submit" disabled={isSubmitDisabled}>
         Submit
       </button>
     </form>

@@ -17,6 +17,8 @@ const FormControlledView = ({
 }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <h2 className="header">Controlled Form</h2>
+
       <Controller
         name="name"
         control={control}
@@ -61,21 +63,25 @@ const FormControlledView = ({
         )}
       />
 
-      <Controller
-        name="password"
-        control={control}
-        render={({ field }) => (
-          <TextInput
-            label="Password"
-            id="password"
-            name="password"
-            type="password"
-            {...field}
-            error={errors.password?.message}
-          />
-        )}
-      />
-      <PasswordStrengthMeter password={passwordValue} />
+      <div className="password-group">
+        <Controller
+          name="password"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              label="Password"
+              id="password"
+              name="password"
+              type="password"
+              {...field}
+              error={errors.password?.message}
+            />
+          )}
+        />
+        <div className="password-strength">
+          <PasswordStrengthMeter password={passwordValue} />
+        </div>
+      </div>
 
       <Controller
         name="confirmPassword"
@@ -91,11 +97,8 @@ const FormControlledView = ({
           />
         )}
       />
-      {errors.confirmPassword && (
-        <div className="error">{errors.confirmPassword.message}</div>
-      )}
 
-      <div>
+      <div className="radio-group">
         <label htmlFor="gender">Gender</label>
         <Controller
           name="gender"

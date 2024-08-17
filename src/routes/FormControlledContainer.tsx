@@ -9,6 +9,18 @@ import { formSubmit } from '../store/formSlice';
 import { useFileHandler } from '../hooks/useFileHandler';
 import FormControlledView from './FormControlledView';
 
+interface FormData {
+  name: string;
+  age: number;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  gender: string;
+  terms: boolean;
+  picture: File[];
+  country: string;
+}
+
 const FormControlledContainer = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,6 +36,8 @@ const FormControlledContainer = () => {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(formSchema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   });
 
   const passwordValue = watch('password');
@@ -33,7 +47,7 @@ const FormControlledContainer = () => {
     setValue('country', country, { shouldValidate: true });
   };
 
-  const onSubmit = async (data: unknown) => {
+  const onSubmit = async (data: FormData) => {
     let pictureData = null;
 
     if (data.picture && data.picture[0]) {

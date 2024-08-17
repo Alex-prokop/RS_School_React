@@ -1,4 +1,4 @@
-.page-container {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,40 +8,41 @@
   padding: 20px;
 }
 
-.heading {
-  text-align: center;
+.header {
   margin-bottom: 20px;
 }
 
-.data-container {
+.card {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  margin-bottom: 10px;
+  padding: 10px;
   width: 100%;
   max-width: 600px;
-  margin-bottom: 20px;
-  padding: 15px;
-  border-radius: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
   transition:
     background-color 0.5s ease,
     border 0.5s ease;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
 }
 
-.data-container.highlighted {
+.card.highlight {
   border: 2px solid #4caf50;
   background-color: #e8f5e9;
 }
 
-.picture {
+.image-container {
+  margin-right: 20px;
+}
+
+.image {
   max-width: 150px;
   max-height: 150px;
-  margin-right: 20px;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .info {
-  display: flex;
-  flex-direction: column;
+  flex: 1;
 }

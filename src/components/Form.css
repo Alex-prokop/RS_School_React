@@ -1,10 +1,18 @@
 form {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+h2.header {
+  text-align: center;
+  color: #333333;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
 input[type='text'],
@@ -15,18 +23,31 @@ input[type='file'],
 input[type='checkbox'],
 select {
   width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #dcdcdc;
   border-radius: 4px;
   box-sizing: border-box;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+input[type='email']:focus,
+input[type='password']:focus,
+input[type='file']:focus,
+input[type='checkbox']:focus,
+select:focus {
+  border-color: #4caf50;
+  outline: none;
 }
 
 label {
   margin-bottom: 8px;
   display: block;
   font-weight: bold;
+  color: #555555;
 }
 
 button {
@@ -34,19 +55,54 @@ button {
   background-color: #4caf50;
   color: white;
   padding: 14px 20px;
-  margin: 8px 0;
+  margin-top: 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.2s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+  background-color: #3e8e41;
 }
 
 button:disabled {
   background-color: #cccccc;
+  cursor: not-allowed;
 }
 
 .error {
-  color: red;
+  color: #e74c3c;
   font-size: 12px;
   margin-top: -6px;
   margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.radio-group {
+  display: flex;
+  justify-content: space-around;
+
+  align-items: center;
+}
+
+.radio-group label {
+  margin-right: 15px;
+}
+
+.password-group input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.password-strength {
+  min-width: 100px;
 }

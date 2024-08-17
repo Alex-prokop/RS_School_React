@@ -23,13 +23,13 @@ const CountryAutocomplete = ({
         country.toLowerCase().includes(value.toLowerCase())
       )
     );
-    onSelectCountry(value); // Обновляем значение country в форме при каждом изменении ввода
+    onSelectCountry(value);
   };
 
   const handleSelect = (country: string) => {
     setInputValue(country);
     setFilteredCountries([]);
-    onSelectCountry(country); // Обновляем значение country в форме при выборе из списка
+    onSelectCountry(country);
   };
 
   return (

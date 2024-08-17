@@ -29,20 +29,33 @@ const FormUncontrolledContainer = () => {
   });
 
   const passwordStrength = usePasswordStrength(formData.password);
-  const { handleFileChange } = useFileHandler(); 
+  const { handleFileChange } = useFileHandler();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCountrySelect = (country: string) => {
     setFormData((prev) => ({ ...prev, country }));
+    if (errors.country) {
+      const newErrors = { ...errors };
+      delete newErrors.country;
+      setErrors(newErrors);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked, files } = e.target;
+    const newValue = type === 'checkbox' ? checked : files ? [files[0]] : value;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : files ? [files[0]] : value,
+      [name]: newValue,
     }));
+
+    if (errors[name]) {
+      const newErrors = { ...errors };
+      delete newErrors[name];
+      setErrors(newErrors);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,6 +96,8 @@ const FormUncontrolledContainer = () => {
     }
   };
 
+  const isSubmitDisabled = isSubmitting || Object.keys(errors).length > 0;
+
   return (
     <FormUncontrolledView
       formData={formData}
@@ -93,6 +108,7 @@ const FormUncontrolledContainer = () => {
       handleSubmit={handleSubmit}
       handleCountrySelect={handleCountrySelect}
       countries={countries}
+      isSubmitDisabled={isSubmitDisabled}
     />
   );
 };
