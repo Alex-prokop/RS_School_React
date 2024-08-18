@@ -46,6 +46,9 @@ const Main = () => {
               <strong>Email:</strong> {data.email}
             </p>
             <p>
+              <strong>Password:</strong> {data.password}
+            </p>
+            <p>
               <strong>Gender:</strong> {data.gender}
             </p>
             <p>

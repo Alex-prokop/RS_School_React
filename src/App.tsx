@@ -1,8 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  NavLink,
+} from 'react-router-dom';
 import Main from './routes/Main';
 import FormUncontrolledContainer from './routes/FormUncontrolledContainer';
 import FormControlledContainer from './routes/FormControlledContainer';
+import './App.css';
 
 function App() {
   return (
@@ -10,30 +16,33 @@ function App() {
       <nav>
         <ul>
           <li>
-            <Link
+            <NavLink
               to="/"
+              className={({ isActive }) => (isActive ? 'active' : '')}
               onClick={() => console.log('Navigating to Main route')}
             >
               Main
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               to="/form-uncontrolled"
+              className={({ isActive }) => (isActive ? 'active' : '')}
               onClick={() =>
                 console.log('Navigating to Uncontrolled Form route')
               }
             >
               Uncontrolled Form
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               to="/form-controlled"
+              className={({ isActive }) => (isActive ? 'active' : '')}
               onClick={() => console.log('Navigating to Controlled Form route')}
             >
               Controlled Form
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </nav>
