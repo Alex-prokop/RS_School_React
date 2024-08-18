@@ -1,4 +1,3 @@
-// countriesData.ts
 export const initialCountries = [
   'USA',
   'Canada',

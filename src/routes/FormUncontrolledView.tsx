@@ -15,7 +15,7 @@ const FormUncontrolledView = ({
 }) => {
   return (
     <form onSubmit={handleSubmit}>
-      <h2 className="header">FormUncontrolled</h2>
+      <h2 className="header">Uncontrolled Form</h2>
 
       <TextInput
         label="Name"

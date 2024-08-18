@@ -82,5 +82,4 @@ export const formSchema = yup.object().shape({
     ),
 
   country: yup.string().required('Country is required'),
-  // .min(2, 'Country must be at least 2 characters long'),
 });
